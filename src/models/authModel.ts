@@ -1,29 +1,28 @@
 import { Schema, model, Document, Model } from "mongoose";
-import { Role } from "@shared/enums";
 import bcrypt from "bcrypt";
-import to from "await-to-ts";
 import generateOTP from "@utils/generateOTP";
 import { generateToken } from "@utils/jwt";
 
 export type AuthSchema = Document & {
   email: string;
   password: string;
-  role: Role;
+  googleId: string;
   verificationOTP: string;
   verificationOTPExpiredAt: Date | null;
   recoveryOTP: string;
   recoveryOTPExpiredAt: Date | null;
   isVerified: boolean;
+  isBlocked: boolean;
+  findByEmail(email: string): Promise<any>;
   comparePassword(password: string): Promise<boolean>;
   generateVerificationOTP(): void;
-  clearVerifictaionOTP(): void;
+  clearVerificationOTP(): void;
   isCorrectVerificationOTP(otp: string): boolean;
   isVerificationOTPExpired(): boolean;
   generateRecoveryOTP(): void;
   clearRecoveryOTP(): void;
   isCorrectRecoveryOTP(otp: string): boolean;
   isRecoveryOTPExpired(): boolean;
-  generateAccessToken(id: string): string;
 };
 
 const authSchema: Schema<AuthSchema> = new Schema<AuthSchema>({
@@ -34,12 +33,9 @@ const authSchema: Schema<AuthSchema> = new Schema<AuthSchema>({
   },
   password: {
     type: String,
-    required: true,
   },
-  role: {
+  googleId: {
     type: String,
-    enum: Object.values(Role),
-    required: true,
   },
   verificationOTP: {
     type: String,
@@ -57,6 +53,10 @@ const authSchema: Schema<AuthSchema> = new Schema<AuthSchema>({
     type: Boolean,
     default: false,
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 authSchema.methods.comparePassword = async function (password: string) {
@@ -99,27 +99,22 @@ authSchema.methods.isRecoveryOTPExpired = function (): boolean {
   return this.recoveryOTPExpiredAt !== null && this.recoveryOTPExpiredAt < new Date();
 };
 
-authSchema.statics.generateAccessToken = function (id: string): string {
-  const accessSecret = process.env.JWT_ACCESS_SECRET;
-  return generateToken(id, accessSecret!);
+authSchema.statics.findByEmail = async function (email: string): Promise<AuthSchema | null> {
+  return this.findOne({ email }).exec();
 };
 
-authSchema.statics.findByEmailWithoutPassword = async function (email: string): Promise<AuthSchema | null> {
-  return this.findOne({ email }).select("-password").exec();
+authSchema.statics.generateAccessToken = function (id: string): string {
+  return generateToken(id, process.env.JWT_ACCESS_SECRET!);
 };
 
 authSchema.pre<AuthSchema>("save", async function (next) {
-  if (!this.isModified(this.password)) {
-    return next();
-  }
-  const [error, hashedPassword] = await to(bcrypt.hash(this.password, 10));
-  if (error) return next(error);
-  this.password = hashedPassword;
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
   return next();
 });
 
-export type AuthModel = Model<AuthSchema> & {
-  findByEmailWithoutPassword(email: string): Promise<AuthSchema | null>;
+type AuthModel = Model<AuthSchema> & {
+  findByEmail(email: string): Promise<AuthSchema | null>;
   generateAccessToken(id: string): string;
 };
 

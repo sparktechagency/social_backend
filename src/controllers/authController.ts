@@ -6,181 +6,155 @@ import { Request, Response, NextFunction } from "express";
 import Auth from "@models/authModel";
 import User from "@models/userModel";
 import sendEmail from "@utils/sendEmail";
+import { logger } from "@shared/logger";
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const { userName, email, role, password, confirmPassword } = req.body;
-  let error, auth;
+  const { userName, email, phoneNumber, password, confirmPassword } = req.body;
 
-  [error, auth] = await to(Auth.findOne({ email }));
-  if (error) return next(error);
+  let auth = await Auth.findByEmail(email);
   if (auth) {
+    const message = auth.isVerified ? "Email already exists! Please login." : "Email already exists! Please verify your account";
     return res
       .status(StatusCodes.CONFLICT)
-      .json({ success: false, message: "Email already exists.", data: { isVerified: auth.isVerified } });
+      .json({ success: false, message: message, data: { isVerified: auth.isVerified } });
   }
 
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const session = req.session;
+  auth = new Auth({
+    email,
+    password,
+  });
+  auth.generateVerificationOTP();
+  logger.info(auth.verificationOTP);
+  await auth.save({ session });
 
-  try {
-    const newAuth = new Auth({
-      email,
-      role,
-      password,
-      isVerified: false,
-      isBlocked: false,
-    });
+  const user = new User({
+    auth: auth._id,
+    userName,
+    phoneNumber,
+  });
+  await user.save({session});
+  await sendEmail(email, auth.verificationOTP);
 
-    newAuth.generateVerificationOTP();
-
-    [error, auth] = await to(newAuth.save({ session }));
-    if (error) throw error;
-
-    [error] = await to(
-      User.create(
-        [
-          {
-            auth: auth._id,
-            userName,
-          },
-        ],
-        { session }
-      )
-    );
-    if (error) throw error;
-
-    await session.commitTransaction();
-
-    await sendEmail(email, auth.verificationOTP);
-
-    return res.status(StatusCodes.CREATED).json({
-      success: true,
-      message: "Registration successful",
-      data: { isVerified: auth.isVerified, verificationOTP: auth.verificationOTP },
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    return next(error);
-  } finally {
-    await session.endSession();
-  }
+  return res.status(StatusCodes.CREATED).json({
+    success: true,
+    message: "Registration successful",
+    data: { isVerified: auth.isVerified, otp: auth.verificationOTP },
+  });
 };
 
 const activate = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const { email, verificationOTP } = req.body;
+  const { email, otp } = req.body;
+  let auth;
+  auth = await Auth.findByEmail(email);
+  if (!auth) throw createError(StatusCodes.NOT_FOUND, "User not found");
 
-  let error, auth;
-  auth = await Auth.findByEmailWithoutPassword(email);
-  if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User not found"));
-
-  if (!auth.isCorrectVerificationOTP(verificationOTP))
-    return next(createError(StatusCodes.UNAUTHORIZED, "Wrong OTP. Please enter the correct code"));
+  if (!auth.isCorrectVerificationOTP(otp))
+    throw createError(StatusCodes.UNAUTHORIZED, "Wrong OTP. Please enter the correct code");
 
   if (auth.isVerificationOTPExpired())
-    return next(createError(StatusCodes.UNAUTHORIZED, "Verification OTP has expired."));
+    throw createError(StatusCodes.UNAUTHORIZED, "Verification OTP has expired.");
 
-  auth.clearVerifictaionOTP();
+  auth.clearVerificationOTP();
   auth.isVerified = true;
-
-  [error] = await to(auth.save());
-  if (error) return next(error);
-
+  await auth.save();
   const accessToken = Auth.generateAccessToken(auth._id!.toString());
 
   return res.status(StatusCodes.OK).json({
     success: true,
     message: "Account successfully verified.",
-    data: { accessToken },
+    data: { accessToken: accessToken },
   });
 };
 
 const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { email, password } = req.body;
-  let error, auth, isPasswordValid;
-  [error, auth] = await to(Auth.findOne({ email }));
-  if (error) return next(error);
+  let auth = await Auth.findByEmail(email);
   if (!auth) return next(createError(StatusCodes.NOT_FOUND, "No account found with the given email"));
 
   if (!(await auth.comparePassword(password)))
     return next(createError(StatusCodes.UNAUTHORIZED, "Wrong password. Please try again"));
 
   if (!auth.isVerified) return next(createError(StatusCodes.UNAUTHORIZED, "Verify your email first"));
-
-  const accessToken = auth.generateAccessToken(auth._id!.toString());
+  const accessToken = Auth.generateAccessToken(auth._id!.toString());
 
   return res.status(StatusCodes.OK).json({
     success: true,
     message: "Login successful",
-    data: { accessToken },
+    data: { accessToken: accessToken },
+  });
+};
+
+const signInWithGoogle = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { googleId, name, email, avatar } = req.body;
+  let auth;
+  auth = await Auth.findOne({ googleId: googleId });
+  if (!auth) {
+    auth = await Auth.create({ googleId, email });
+    const user = await User.create({ auth: auth._id, userName: name, avatar });
+    console.log(user._id);
+  }
+  const accessToken = Auth.generateAccessToken(auth._id!.toString());
+
+  return res.status(StatusCodes.OK).json({
+    success: true,
+    message: "Login successful",
+    data: { accessToken: accessToken},
   });
 };
 
 const resendOTP = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { email, status } = req.body;
-  let error, auth, verificationOTP, recoveryOTP;
-  [error, auth] = await to(Auth.findOne({ email: email }));
-  if (error) return next(error);
-  if (!auth) return next(createError(StatusCodes.NOT_FOUND, "Account not found"));
+  let auth = await Auth.findOne({ email: email });
+  if (!auth) throw createError(StatusCodes.NOT_FOUND, "Account not found");
 
   if (status === "activate" && auth.isVerified)
     return res
-      .status(StatusCodes.OK)
+      .status(StatusCodes.CONFLICT)
       .json({ success: true, message: "Your account is already verified. Please login.", data: {} });
 
   if (status === "activate" && !auth.isVerified) {
     auth.generateVerificationOTP();
-    [error] = await to(auth.save());
-    if (error) return next(error);
+    await auth.save();
     await sendEmail(email, auth.verificationOTP);
     return res
       .status(StatusCodes.OK)
-      .json({ success: true, message: "OTP resend successful", data: { verificationOTP } });
+      .json({ success: true, message: "OTP resend successful", data: { otp: auth.verificationOTP } });
   }
 
   if (status === "recovery") {
     auth.generateRecoveryOTP();
-    [error] = await to(auth.save());
-    if (error) return next(error);
+    await auth.save();
     await sendEmail(email, auth.recoveryOTP);
-    return res.status(StatusCodes.OK).json({ success: true, message: "OTP resend successful", data: { recoveryOTP } });
+    return res.status(StatusCodes.OK).json({ success: true, message: "OTP resend successful", data: { otp: auth.recoveryOTP } });
   }
 };
 
 const recovery = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { email } = req.body;
 
-  let error, auth;
-  [error, auth] = await to(Auth.findOne({ email }));
-  if (error) return next(error);
-  if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User Not Found"));
-
+  let auth = await Auth.findByEmail(email);
+  if (!auth) return next(createError(StatusCodes.NOT_FOUND, "No account found with the given email"));
   auth.generateRecoveryOTP();
+
   await sendEmail(email, auth.recoveryOTP);
-
-  [error] = await to(auth.save());
-  if (error) return next(error);
-
+  await auth.save();
   return res
     .status(StatusCodes.OK)
-    .json({ success: true, message: "Success", data: { recoveryOTP: auth.recoveryOTP } });
+    .json({ success: true, message: "Success", data: { otp: auth.recoveryOTP } });
 };
 
 const recoveryVerification = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const { email, recoveryOTP } = req.body;
-  let error, auth;
+  const { email, otp } = req.body;
 
-  [error, auth] = await to(Auth.findOne({ email }).select("-password"));
-  if (error) return next(error);
+  let auth = await Auth.findByEmail(email);
   if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User not found"));
-
   if (auth.isRecoveryOTPExpired()) return next(createError(StatusCodes.UNAUTHORIZED, "Recovery OTP has expired."));
-  if (!auth.isCorrectRecoveryOTP(recoveryOTP))
+  if (!auth.isCorrectRecoveryOTP(otp))
     return next(createError(StatusCodes.UNAUTHORIZED, "Wrong OTP. Please try again"));
 
   auth.clearRecoveryOTP();
-
-  [error] = await to(auth.save());
-  if (error) return next(error);
+  await auth.save();
 
   return res.status(StatusCodes.OK).json({
     success: true,
@@ -191,55 +165,45 @@ const recoveryVerification = async (req: Request, res: Response, next: NextFunct
 
 const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { email, password, confirmPassword } = req.body;
-  let error, auth;
 
-  [error, auth] = await to(Auth.findOne({ email: email }));
-  if (error) return next(error);
+  let auth = await Auth.findByEmail(email);
   if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User Not Found"));
-
   if (password !== confirmPassword) return next(createError(StatusCodes.BAD_REQUEST, "Passwords don't match"));
 
   auth.password = password;
-  [error] = await to(auth.save());
-  if (error) return next(error);
+  await auth.save();
 
-  return res.status(StatusCodes.OK).json({ success: true, message: "Password reset successful", data: {} });
+  const accessToken = Auth.generateAccessToken(auth._id!.toString());
+
+  return res.status(StatusCodes.OK).json({ success: true, message: "Password reset successful", data: {accessToken: accessToken} });
 };
 
 const changePassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const user = req.user;
   const { password, newPassword, confirmPassword } = req.body;
-  let error, auth;
 
-  [error, auth] = await to(Auth.findById(user.authId));
-  if (error) return next(error);
+  let auth = await Auth.findByEmail(user.email);
   if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User Not Found"));
-
-  if (await auth.comparePassword(password))
+  if (!(await auth.comparePassword(password)))
     return next(createError(StatusCodes.UNAUTHORIZED, "Wrong Password. Please try again."));
 
   auth.password = newPassword;
-  [error] = await to(auth.save());
-  if (error) return next(error);
-
-  return res.status(StatusCodes.OK).json({ success: true, message: "Passowrd changed successfully", data: {} });
+  await auth.save();
+  return res.status(StatusCodes.OK).json({ success: true, message: "Password changed successfully", data: {} });
 };
 
 const remove = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const userId = req.user.userId;
   const authId = req.user.authId;
-
-  try {
-    await Promise.all([Auth.findByIdAndDelete(authId), User.findByIdAndDelete(userId)]);
-    return res.status(StatusCodes.OK).json({ success: true, message: "User Removed successfully", data: {} });
-  } catch (e) {
-    return next(e);
-  }
+  await Promise.all([Auth.findByIdAndDelete(authId), User.findByIdAndDelete(userId)]);
+  return res.status(StatusCodes.OK).json({ success: true, message: "User Removed successfully", data: {} });
 };
+
 const AuthController = {
   register,
   activate,
   login,
+  signInWithGoogle,
   resendOTP,
   recovery,
   recoveryVerification,

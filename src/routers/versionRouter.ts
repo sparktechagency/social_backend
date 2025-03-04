@@ -1,11 +1,11 @@
 import express from "express";
-import TaCController from "@controllers/tacControllers";
+import VersionController from "@controllers/versionController";
 import { admin_authorize, authorize } from "@middlewares/authorization";
 import { asyncHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
-router.get("/", authorize, asyncHandler(TaCController.get));
-router.patch("/update", admin_authorize, asyncHandler(TaCController.update));
+router.get("/", authorize, asyncHandler(VersionController.get));
+router.patch("/update", admin_authorize, asyncHandler(VersionController.update));
 
 export default router;

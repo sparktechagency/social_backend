@@ -1,9 +1,14 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, model, Model, Schema } from "mongoose";
 import readline from "node:readline";
 import bcrypt from "bcrypt";
 import generateOTP from "@utils/generateOTP";
 import { generateToken } from "@utils/jwt";
 import { logger } from "@shared/logger";
+
+export type DecodedAdmin = {
+  id: string;
+  email: string;
+};
 
 export type AdminSchema = Document & {
   name: string;
@@ -118,5 +123,5 @@ type AdminModel = Model<AdminSchema> & {
 };
 
 
-const Admin = mongoose.model<AdminSchema, AdminModel>("Admin", adminSchema);
+const Admin = model<AdminSchema, AdminModel>("Admin", adminSchema);
 export default Admin;

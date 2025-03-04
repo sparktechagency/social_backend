@@ -1,4 +1,4 @@
-import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
+import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from "jsonwebtoken";
 import createError from "http-errors";
 import { StatusCodes } from "http-status-codes";
 
@@ -8,14 +8,12 @@ type Decoded = {
 
 export const generateToken = (id: string, secret: string): string => jwt.sign({ id: id }, secret, { expiresIn: "92h" });
 
-export const decodeToken = (token: string, secret: string): [Error | null, Decoded | null] => {
+export const decodeToken = (token: string, secret: string): Decoded => {
   try {
-    const decoded = jwt.verify(token, secret) as JwtPayload & Decoded;
-    return [null, decoded];
+    return jwt.verify(token, secret) as JwtPayload & Decoded;
   } catch (err: any) {
     let errorMessage: string;
     let statusCode: number;
-
     if (err instanceof TokenExpiredError) {
       errorMessage = "Token has expired";
       statusCode = StatusCodes.UNAUTHORIZED;
@@ -26,7 +24,6 @@ export const decodeToken = (token: string, secret: string): [Error | null, Decod
       errorMessage = "Internal Server Error";
       statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
     }
-
-    return [createError(statusCode, errorMessage), null];
+    throw createError(statusCode, errorMessage);
   }
 };

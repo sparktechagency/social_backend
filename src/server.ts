@@ -4,14 +4,26 @@ import "dotenv/config";
 import { connectDB } from "@connection/atlasDB";
 import { logger } from "@shared/logger";
 import initializeSocket from "./socket";
+import Admin from "@models/adminModel";
+import Privacy from "@models/privacyModel";
+import TaC from "@models/tacModel";
+import Contract from "@models/contractModel";
+import Version from "@models/versionModel";
 
 const PORT = process.env.PORT || 8000;
 
 async function startServer() {
   try {
     await connectDB();
+
     const server = http.createServer(app);
     initializeSocket(server);
+
+    await Admin.findOrCreate();
+    await Privacy.findOrCreate();
+    await TaC.findOrCreate();
+    await Contract.findOrCreate();
+    await Version.findOrCreate();
 
     const shutdown = () => {
       logger.info("Shutting down server...");
@@ -33,7 +45,7 @@ async function startServer() {
     });
   } catch (error) {
     logger.error("Failed to start the server:", error);
-    process.exit(1); // Exit process on startup failure
+    process.exit(1);
   }
 }
 

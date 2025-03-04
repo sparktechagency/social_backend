@@ -1,23 +1,23 @@
+import { NextFunction, Request, Response } from "express";
 import Privacy from "@models/privacyModel";
-import { Request, Response, NextFunction } from "express";
-import createError from "http-errors";
 import { StatusCodes } from "http-status-codes";
+import createError from "http-errors";
 
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const privacy = await Privacy.findOne();
-  return res.status(StatusCodes.OK).json({ success: true, message: "Privacy policy retrieved successfully", data: privacy });
+  return res.status(StatusCodes.OK).json({ success: true, message: "Contract us information retrieved successfully", data: privacy });
 };
 
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { text } = req.body;
   if (!text) return next(createError(StatusCodes.BAD_REQUEST, "No text provided!"));
   const privacy = await Privacy.findOneAndUpdate({}, {text: text}, { new : true});
-  return res.status(StatusCodes.OK).json({ success: true, message: "Privacy policy updated successfully", data: privacy });
+  return res.status(StatusCodes.OK).json({ success: true, message: "Contract us information updated successfully", data: privacy });
 };
 
-const PrivacyController = {
+const ContractController = {
   get,
-  update
-};
+  update,
+}
 
-export default PrivacyController;
+export default ContractController;
