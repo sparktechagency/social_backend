@@ -1,5 +1,3 @@
-import to from "await-to-ts";
-import mongoose from "mongoose";
 import createError from "http-errors";
 import { StatusCodes } from "http-status-codes";
 import { Request, Response, NextFunction } from "express";
@@ -9,7 +7,7 @@ import sendEmail from "@utils/sendEmail";
 import { logger } from "@shared/logger";
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const { userName, email, phoneNumber, password, confirmPassword } = req.body;
+  const { name, email, phoneNumber, password, confirmPassword } = req.body;
 
   let auth = await Auth.findByEmail(email);
   if (auth) {
@@ -30,7 +28,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
 
   const user = new User({
     auth: auth._id,
-    userName,
+    name,
     phoneNumber,
   });
   await user.save({session});
@@ -92,10 +90,8 @@ const signInWithGoogle = async (req: Request, res: Response, next: NextFunction)
   if (!auth) {
     auth = await Auth.create({ googleId, email });
     const user = await User.create({ auth: auth._id, userName: name, avatar });
-    console.log(user._id);
   }
   const accessToken = Auth.generateAccessToken(auth._id!.toString());
-
   return res.status(StatusCodes.OK).json({
     success: true,
     message: "Login successful",

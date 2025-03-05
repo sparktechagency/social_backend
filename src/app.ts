@@ -8,7 +8,7 @@ import FaqRouter from "@routes/faqRouter";
 import TaCRouter from "@routes/tacRouter";
 import PrivacyRouter from "@routes/privacyRouter";
 import { requestLogger } from "@middlewares/requestLogger";
-import ContractRouter from "@routes/contractRouter";
+import ContactRouter from "@routes/contactRouter";
 import VersionRouter from "@routes/versionRouter";
 import ActivityRouter from "@routes/activityRouter";
 
@@ -31,7 +31,7 @@ const routes = [
   { path: "/faq", router: FaqRouter },
   { path: "/tac", router: TaCRouter },
   { path: "/privacy", router: PrivacyRouter },
-  { path: "/contract", router: ContractRouter },
+  { path: "/contact", router: ContactRouter },
   { path: "/version", router: VersionRouter },
 ];
 

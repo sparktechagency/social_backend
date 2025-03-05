@@ -7,7 +7,7 @@ import initializeSocket from "./socket";
 import Admin from "@models/adminModel";
 import Privacy from "@models/privacyModel";
 import TaC from "@models/tacModel";
-import Contract from "@models/contractModel";
+import Contract from "@models/contactModel";
 import Version from "@models/versionModel";
 
 const PORT = process.env.PORT || 8000;
