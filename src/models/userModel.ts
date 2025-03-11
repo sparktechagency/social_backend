@@ -16,7 +16,7 @@ export type UserSchema = Document & {
   dateOfBirth: string;
   gender: string;
   photo: string[];
-  distance_preference: number;
+  distancePreference: number;
   school: {
     name: string;
     year: number | null;
@@ -43,7 +43,7 @@ const userSchema = new Schema(
     dateOfBirth: { type: String },
     gender: { type: String },
     photo: [{ type: String }],
-    distance_preference: { type: Number },
+    distancePreference: { type: Number },
     school: {
       name: { type: String, default: "" },
       year: { type: Number, default: null }

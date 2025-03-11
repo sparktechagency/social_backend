@@ -1,0 +1,170 @@
+Sun Mar 09 2025 15:3:9 [Podlove] [32minfo[39m: OPTIONS /auth/login 204 - 1ms
+Sun Mar 09 2025 15:3:10 [Podlove] [32minfo[39m: POST /auth/login 200 - 344ms
+Sun Mar 09 2025 15:18:35 [Podlove] [32minfo[39m: OPTIONS /auth/login 204 - 1ms
+Sun Mar 09 2025 15:18:35 [Podlove] [32minfo[39m: POST /auth/login 200 - 102ms
+Sun Mar 09 2025 15:26:47 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:26:47 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:26:47 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 50ms
+Sun Mar 09 2025 15:26:51 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:26:51 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 42ms
+Sun Mar 09 2025 15:26:51 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:26:51 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 43ms
+Sun Mar 09 2025 15:26:51 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:26:51 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 42ms
+Sun Mar 09 2025 15:27:3 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:27:3 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:27:3 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 42ms
+Sun Mar 09 2025 15:27:13 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:27:13 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sun Mar 09 2025 15:27:13 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 43ms
+Sun Mar 09 2025 15:27:22 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:27:25 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741512471 d9443c01a7336-224109e9cfesm57771755ad.87 - gsmtp
+Sun Mar 09 2025 15:27:26 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3624ms
+Sun Mar 09 2025 15:28:3 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 0ms
+Sun Mar 09 2025 15:28:5 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741512511 d9443c01a7336-22410a925ddsm57924635ad.203 - gsmtp
+Sun Mar 09 2025 15:28:5 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 2632ms
+Sun Mar 09 2025 15:28:39 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:28:43 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741512548 d9443c01a7336-224109def8bsm58017395ad.8 - gsmtp
+Sun Mar 09 2025 15:28:43 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3615ms
+Sun Mar 09 2025 15:29:58 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 0ms
+Sun Mar 09 2025 15:30:0 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741512626 d9443c01a7336-22410a91bdesm57739985ad.176 - gsmtp
+Sun Mar 09 2025 15:30:1 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3662ms
+Sun Mar 09 2025 15:36:18 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:36:21 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513006 41be03b00d2f7-af51619d604sm2060607a12.42 - gsmtp
+Sun Mar 09 2025 15:36:21 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 2948ms
+Sun Mar 09 2025 15:42:17 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 0ms
+Sun Mar 09 2025 15:42:22 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513367 d9443c01a7336-22410a80fe2sm58028165ad.157 - gsmtp
+Sun Mar 09 2025 15:42:22 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 4355ms
+Sun Mar 09 2025 15:43:35 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 1ms
+Sun Mar 09 2025 15:43:39 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513444 98e67ed59e1d1-2ff6933a9cesm5914564a91.7 - gsmtp
+Sun Mar 09 2025 15:43:39 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 4199ms
+Sun Mar 09 2025 15:44:13 [Podlove] [32minfo[39m: OPTIONS /auth/recovery 204 - 0ms
+Sun Mar 09 2025 15:44:16 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513481 d2e1a72fcca58-736be0ae3desm2739436b3a.12 - gsmtp
+Sun Mar 09 2025 15:44:16 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3398ms
+Sun Mar 09 2025 15:44:58 [Podlove] [32minfo[39m: OPTIONS /auth/recovery-verification 204 - 0ms
+Sun Mar 09 2025 15:44:58 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:44:58 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 41ms
+Sun Mar 09 2025 15:45:6 [Podlove] [32minfo[39m: OPTIONS /auth/recovery-verification 204 - 1ms
+Sun Mar 09 2025 15:45:6 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:45:6 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 45ms
+Sun Mar 09 2025 15:45:40 [Podlove] [32minfo[39m: OPTIONS /auth/recovery-verification 204 - 0ms
+Sun Mar 09 2025 15:45:40 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:45:40 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 40ms
+Sun Mar 09 2025 15:46:6 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:46:6 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms
+Sun Mar 09 2025 15:46:35 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:46:35 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 42ms
+Sun Mar 09 2025 15:47:6 [Podlove] [32minfo[39m: OPTIONS /auth/recovery-verification 204 - 1ms
+Sun Mar 09 2025 15:47:6 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:47:6 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 43ms
+Sun Mar 09 2025 15:47:7 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:47:7 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 42ms
+Sun Mar 09 2025 15:47:40 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513686 d9443c01a7336-224109e9f86sm58147035ad.83 - gsmtp
+Sun Mar 09 2025 15:47:40 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 2942ms
+Sun Mar 09 2025 15:47:52 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:47:52 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms
+Sun Mar 09 2025 15:47:54 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:47:54 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 41ms
+Sun Mar 09 2025 15:49:3 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:49:3 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms
+Sun Mar 09 2025 15:49:16 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741513782 d9443c01a7336-22410a91cf4sm57797825ad.200 - gsmtp
+Sun Mar 09 2025 15:49:16 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3143ms
+Sun Mar 09 2025 15:52:43 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:52:43 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 41ms
+Sun Mar 09 2025 15:54:31 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:54:31 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 297ms
+Sun Mar 09 2025 15:54:50 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741514115 98e67ed59e1d1-2ff693e7388sm6624028a91.35 - gsmtp
+Sun Mar 09 2025 15:54:50 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3742ms
+Sun Mar 09 2025 15:54:58 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:54:58 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms
+Sun Mar 09 2025 15:55:29 [Podlove] [32minfo[39m: POST /auth/reset-password 200 - 174ms
+Sun Mar 09 2025 15:56:29 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741514214 d2e1a72fcca58-736982077dfsm6236940b3a.35 - gsmtp
+Sun Mar 09 2025 15:56:29 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 2679ms
+Sun Mar 09 2025 15:56:35 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:56:35 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms
+Sun Mar 09 2025 15:56:40 [Podlove] [31merror[39m: Wrong OTP. Please try again
+UnauthorizedError: Wrong OTP. Please try again
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:150:28)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sun Mar 09 2025 15:56:40 [Podlove] [32minfo[39m: POST /auth/recovery-verification 401 - 44ms

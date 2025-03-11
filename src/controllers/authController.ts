@@ -7,7 +7,7 @@ import sendEmail from "@utils/sendEmail";
 import { logger } from "@shared/logger";
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const { name, email, phoneNumber, password, confirmPassword } = req.body;
+  const { name, email, mobileNumber, password, confirmPassword } = req.body;
 
   let auth = await Auth.findByEmail(email);
   if (auth) {
@@ -29,7 +29,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
   const user = new User({
     auth: auth._id,
     name,
-    phoneNumber,
+    mobileNumber,
   });
   await user.save({session});
   await sendEmail(email, auth.verificationOTP);

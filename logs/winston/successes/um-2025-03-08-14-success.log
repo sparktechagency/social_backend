@@ -1,0 +1,96 @@
+Sat Mar 08 2025 14:11:34 [Podlove] [31merror[39m: Verification OTP has expired.
+UnauthorizedError: Verification OTP has expired.
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:54:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:11:34 [Podlove] [32minfo[39m: POST /auth/activate 401 - 46ms
+Sat Mar 08 2025 14:23:6 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:23:6 [Podlove] [32minfo[39m: POST /auth/activate 401 - 48ms
+Sat Mar 08 2025 14:23:42 [Podlove] [31merror[39m: No account found with the given email
+NotFoundError: No account found with the given email
+    at recovery (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:133:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sat Mar 08 2025 14:23:42 [Podlove] [32minfo[39m: POST /auth/recovery 404 - 304ms
+Sat Mar 08 2025 14:23:57 [Podlove] [31merror[39m: User not found
+NotFoundError: User not found
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:147:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sat Mar 08 2025 14:23:57 [Podlove] [32minfo[39m: POST /auth/recovery-verification 404 - 48ms
+Sat Mar 08 2025 14:24:1 [Podlove] [31merror[39m: User not found
+NotFoundError: User not found
+    at recoveryVerification (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:147:37)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Sat Mar 08 2025 14:24:1 [Podlove] [32minfo[39m: POST /auth/recovery-verification 404 - 47ms
+Sat Mar 08 2025 14:24:11 [Podlove] [32minfo[39m: POST /auth/recovery-verification 200 - 113ms
+Sat Mar 08 2025 14:24:36 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741422297 41be03b00d2f7-af43dc50e5csm2615706a12.40 - gsmtp
+Sat Mar 08 2025 14:24:36 [Podlove] [32minfo[39m: POST /auth/recovery 200 - 3397ms
+Sat Mar 08 2025 14:25:2 [Podlove] [32minfo[39m: OPTIONS /auth/login 204 - 1ms
+Sat Mar 08 2025 14:25:2 [Podlove] [31merror[39m: Verify your email first
+UnauthorizedError: Verify your email first
+    at login (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:76:48)
+UnauthorizedError
+Sat Mar 08 2025 14:25:2 [Podlove] [32minfo[39m: POST /auth/login 401 - 109ms
+Sat Mar 08 2025 14:25:32 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:25:32 [Podlove] [32minfo[39m: POST /auth/activate 401 - 48ms
+Sat Mar 08 2025 14:25:35 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:25:35 [Podlove] [32minfo[39m: POST /auth/activate 401 - 48ms
+Sat Mar 08 2025 14:26:5 [Podlove] [32minfo[39m: 864790
+Sat Mar 08 2025 14:26:8 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741422389 41be03b00d2f7-af28126dff4sm3533075a12.54 - gsmtp
+Sat Mar 08 2025 14:26:8 [Podlove] [32minfo[39m: POST /auth/register 201 - 2764ms
+Sat Mar 08 2025 14:26:24 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:24 [Podlove] [32minfo[39m: POST /auth/activate 401 - 47ms
+Sat Mar 08 2025 14:26:27 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:27 [Podlove] [32minfo[39m: POST /auth/activate 401 - 299ms
+Sat Mar 08 2025 14:26:42 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:42 [Podlove] [32minfo[39m: POST /auth/activate 401 - 48ms
+Sat Mar 08 2025 14:26:44 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:44 [Podlove] [32minfo[39m: POST /auth/activate 401 - 46ms
+Sat Mar 08 2025 14:26:45 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:45 [Podlove] [32minfo[39m: POST /auth/activate 401 - 47ms
+Sat Mar 08 2025 14:26:47 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:47 [Podlove] [32minfo[39m: POST /auth/activate 401 - 47ms
+Sat Mar 08 2025 14:26:48 [Podlove] [31merror[39m: Wrong OTP. Please enter the correct code
+UnauthorizedError: Wrong OTP. Please enter the correct code
+    at activate (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:51:22)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+UnauthorizedError
+Sat Mar 08 2025 14:26:48 [Podlove] [32minfo[39m: POST /auth/activate 401 - 305ms
