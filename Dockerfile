@@ -1,5 +1,4 @@
-FROM node:20-alpine AS builder
-
+FROM node:23.4.0
 WORKDIR /usr/src/app
   
 COPY package.json pnpm-lock.yaml ./
@@ -9,7 +8,7 @@ RUN pnpm install --frozen-lockfile --prod
 COPY . .
 RUN pnpm build
     
-FROM node:20-alpine
+FROM node:23.4.0
   
 WORKDIR /usr/src/app
 
