@@ -1773,3 +1773,166 @@ Tue Mar 11 2025 12:41:13 [Podlove] [32minfo[39m: OPTIONS /auth/activate 204 - 
 Tue Mar 11 2025 12:41:13 [Podlove] [32minfo[39m: POST /auth/activate 200 - 107ms
 Tue Mar 11 2025 16:10:58 [Podlove] [32minfo[39m: OPTIONS /auth/login 204 - 1ms
 Tue Mar 11 2025 16:11:0 [Podlove] [32minfo[39m: POST /auth/login 200 - 2439ms
+Wed Mar 12 2025 13:6:8 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 13:6:23 [Podlove] [32minfo[39m: admin created successfully
+Wed Mar 12 2025 13:6:23 [Podlove] [32minfo[39m: Privacy Policy added successfully!
+Wed Mar 12 2025 13:6:23 [Podlove] [32minfo[39m: Terms and conditions added Successfully!
+Wed Mar 12 2025 13:6:23 [Podlove] [32minfo[39m: Contact us added successfully!
+Wed Mar 12 2025 13:6:24 [Podlove] [32minfo[39m: Version Information added successfully!
+Wed Mar 12 2025 13:6:24 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 13:6:47 [Podlove] [32minfo[39m: Shutting down server...
+Wed Mar 12 2025 13:6:55 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 13:6:56 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 13:6:57 [Podlove] [32minfo[39m: Shutting down server...
+Wed Mar 12 2025 15:13:23 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 15:13:27 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 15:13:27 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 15:13:27 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 15:13:27 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 15:13:28 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 15:13:28 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 15:14:36 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 15:14:37 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 15:14:37 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 15:14:37 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 15:14:37 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 15:14:38 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 15:14:38 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 15:16:7 [Podlove] [32minfo[39m: 67ce77e466509e1fad077850
+Wed Mar 12 2025 15:16:7 [Podlove] [31merror[39m: Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at getUserInfo (/home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:16:21)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:62:14
+TypeError
+Wed Mar 12 2025 15:16:7 [Podlove] [32minfo[39m: PATCH /user/update 500 - 297ms
+Wed Mar 12 2025 15:16:55 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 15:16:56 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 15:18:16 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 15:18:17 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 15:18:35 [Podlove] [32minfo[39m: 67ce77e466509e1fad077850
+Wed Mar 12 2025 15:18:35 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:18:35 [Podlove] [32minfo[39m: PATCH /user/update 404 - 145ms
+Wed Mar 12 2025 15:19:3 [Podlove] [32minfo[39m: 67a891c1441f4c65188a8a15
+Wed Mar 12 2025 15:19:3 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:19:3 [Podlove] [32minfo[39m: GET /user/ 404 - 124ms
+Wed Mar 12 2025 15:19:18 [Podlove] [32minfo[39m: 67a891c1441f4c65188a8a15
+Wed Mar 12 2025 15:19:18 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:19:18 [Podlove] [32minfo[39m: PATCH /user/update 404 - 117ms
+Wed Mar 12 2025 15:21:10 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 15:21:10 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 15:21:11 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 15:21:11 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 15:21:11 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 15:21:11 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 15:21:11 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 15:21:14 [Podlove] [32minfo[39m: Decoded id : 67a891c1441f4c65188a8a15
+Wed Mar 12 2025 15:21:14 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:21:14 [Podlove] [32minfo[39m: PATCH /user/update 404 - 145ms
+Wed Mar 12 2025 15:33:24 [Podlove] [32minfo[39m: Decoded id : 67ac6599e14ff204f99675f8
+Wed Mar 12 2025 15:33:25 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:33:25 [Podlove] [32minfo[39m: GET /user/ 404 - 978ms
+Wed Mar 12 2025 15:33:28 [Podlove] [32minfo[39m: Decoded id : 67ac6599e14ff204f99675f8
+Wed Mar 12 2025 15:33:28 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:33:28 [Podlove] [32minfo[39m: GET /user/ 404 - 115ms
+Wed Mar 12 2025 15:33:59 [Podlove] [32minfo[39m: Decoded id : 67ac6599e14ff204f99675f8
+Wed Mar 12 2025 15:33:59 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:33:59 [Podlove] [32minfo[39m: GET /user/ 404 - 118ms
+Wed Mar 12 2025 15:40:6 [Podlove] [31merror[39m: Wrong password. Please try again
+UnauthorizedError: Wrong password. Please try again
+    at login (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:74:28)
+UnauthorizedError
+Wed Mar 12 2025 15:40:6 [Podlove] [32minfo[39m: POST /auth/login 401 - 1161ms
+Wed Mar 12 2025 15:42:3 [Podlove] [31merror[39m: Wrong password. Please try again
+UnauthorizedError: Wrong password. Please try again
+    at login (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:74:28)
+UnauthorizedError
+Wed Mar 12 2025 15:42:3 [Podlove] [32minfo[39m: POST /auth/login 401 - 177ms
+Wed Mar 12 2025 15:42:19 [Podlove] [31merror[39m: Wrong password. Please try again
+UnauthorizedError: Wrong password. Please try again
+    at login (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:74:28)
+UnauthorizedError
+Wed Mar 12 2025 15:42:19 [Podlove] [32minfo[39m: POST /auth/login 401 - 179ms
+Wed Mar 12 2025 15:44:38 [Podlove] [32minfo[39m: Decoded id : 67ac6599e14ff204f99675f8
+Wed Mar 12 2025 15:44:38 [Podlove] [31merror[39m: Account Not Found
+NotFoundError: Account Not Found
+    at /home/mir/dev/projects/social_backend/src/middlewares/authorization.ts:60:41
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+NotFoundError
+Wed Mar 12 2025 15:44:38 [Podlove] [32minfo[39m: GET /user/ 404 - 113ms
+Wed Mar 12 2025 15:44:55 [Podlove] [31merror[39m: Wrong password. Please try again
+UnauthorizedError: Wrong password. Please try again
+    at login (/home/mir/dev/projects/social_backend/src/controllers/authController.ts:74:28)
+UnauthorizedError
+Wed Mar 12 2025 15:44:55 [Podlove] [32minfo[39m: POST /auth/login 401 - 182ms
+Wed Mar 12 2025 16:23:42 [Podlove] [32minfo[39m: 
+Wed Mar 12 2025 16:23:47 [Podlove] [32minfo[39m: Email sent: 250 2.0.0 OK  1741775034 d9443c01a7336-22410aa4be4sm112108885ad.216 - gsmtp
+Wed Mar 12 2025 16:23:47 [Podlove] [32minfo[39m: POST /auth/register 201 - 7386ms
+Wed Mar 12 2025 16:25:53 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas
+Wed Mar 12 2025 16:25:54 [Podlove] [32minfo[39m: admin account exists
+Wed Mar 12 2025 16:25:55 [Podlove] [32minfo[39m: Privacy Policy exists!
+Wed Mar 12 2025 16:25:55 [Podlove] [32minfo[39m: Terms and conditions exists!
+Wed Mar 12 2025 16:25:55 [Podlove] [32minfo[39m: Contact us exists!
+Wed Mar 12 2025 16:25:55 [Podlove] [32minfo[39m: Version Information exists!
+Wed Mar 12 2025 16:25:55 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Wed Mar 12 2025 16:26:0 [Podlove] [32minfo[39m: POST /auth/register 409 - 1166ms
+Wed Mar 12 2025 16:27:6 [Podlove] [32minfo[39m: Shutting down server...
+Thu Mar 13 2025 5:33:18 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas with DB: social
+Thu Mar 13 2025 5:34:9 [Podlove] [32minfo[39m: admin created successfully
+Thu Mar 13 2025 5:34:10 [Podlove] [32minfo[39m: Privacy Policy added successfully!
+Thu Mar 13 2025 5:34:10 [Podlove] [32minfo[39m: Terms and conditions added Successfully!
+Thu Mar 13 2025 5:34:10 [Podlove] [32minfo[39m: Contact us added successfully!
+Thu Mar 13 2025 5:34:10 [Podlove] [32minfo[39m: Version Information added successfully!
+Thu Mar 13 2025 5:34:10 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Thu Mar 13 2025 5:34:20 [Podlove] [32minfo[39m: Shutting down server...
+Thu Mar 13 2025 5:35:19 [Podlove] [32minfo[39m: Successfully Connected to MongoDB Atlas with DB: social
+Thu Mar 13 2025 5:35:19 [Podlove] [32minfo[39m: admin account exists
+Thu Mar 13 2025 5:35:20 [Podlove] [32minfo[39m: Privacy Policy exists!
+Thu Mar 13 2025 5:35:20 [Podlove] [32minfo[39m: Terms and conditions exists!
+Thu Mar 13 2025 5:35:20 [Podlove] [32minfo[39m: Contact us exists!
+Thu Mar 13 2025 5:35:20 [Podlove] [32minfo[39m: Version Information exists!
+Thu Mar 13 2025 5:35:20 [Podlove] [32minfo[39m: Server is running at PORT: 7002
+Thu Mar 13 2025 5:35:22 [Podlove] [32minfo[39m: Shutting down server...

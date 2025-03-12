@@ -99,6 +99,26 @@
             "date": 1741687858209,
             "name": "/home/mir/dev/projects/social_backend/logs/winston/successes/um-2025-03-11-16-success.log",
             "hash": "aff9df72521fbbdb9eed3bc54dac4d86836ca5b1ccfd492cc1805c0c785242e7"
+        },
+        {
+            "date": 1741763164826,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/successes/um-2025-03-12-13-success.log",
+            "hash": "29dc9df077dc714df685fb7be03e5910d1f17ecc7d7fbdcfc6bfb4c0bd18e175"
+        },
+        {
+            "date": 1741770798851,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/successes/um-2025-03-12-15-success.log",
+            "hash": "3ba54cb322512196bf80ac167bc9b338ae59d461f60ab6ef8775c2e6411c3260"
+        },
+        {
+            "date": 1741775022309,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/successes/um-2025-03-12-16-success.log",
+            "hash": "fdd84df0f2e46a0989d212443ccd55d1fc02fc9ade7d9b6142560184e284ad10"
+        },
+        {
+            "date": 1741822395453,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/successes/um-2025-03-13-05-success.log",
+            "hash": "76eb68915b545ce5a004a72e2228aba266a452f94e5c3777446b0411f848c27b"
         }
     ],
     "hashType": "sha256"

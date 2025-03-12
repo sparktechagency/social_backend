@@ -2,6 +2,7 @@ import { Schema, model, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import generateOTP from "@utils/generateOTP";
 import { generateToken } from "@utils/jwt";
+import { logger } from "@shared/logger";
 
 export type AuthSchema = Document & {
   email: string;
@@ -56,7 +57,7 @@ const authSchema: Schema<AuthSchema> = new Schema<AuthSchema>({
   isBlocked: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 authSchema.methods.comparePassword = async function (password: string) {
@@ -65,6 +66,7 @@ authSchema.methods.comparePassword = async function (password: string) {
 
 authSchema.methods.generateVerificationOTP = function (): void {
   this.verificationOTP = generateOTP();
+  logger.info("Ver :" + this.verificationOTP);
   this.verificationOTPExpiredAt = new Date(Date.now() + 60 * 60 * 1000);
 };
 

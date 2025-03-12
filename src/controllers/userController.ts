@@ -11,7 +11,7 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
 };
 
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const user = await User.findByIdAndUpdate(req.user.userId, req.body, { new: true });
+  const user = await User.findByIdAndUpdate(req.user.userId, { $set: req.body }, { new: true });
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: user });
 };
 

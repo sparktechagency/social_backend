@@ -39,6 +39,26 @@
             "date": 1741663705089,
             "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-11-09-error.log",
             "hash": "e269766c02822925e4ab7a8f60c5c5203481f6a25b5ed0c9796a110d9f89cf58"
+        },
+        {
+            "date": 1741763164828,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-12-13-error.log",
+            "hash": "8e0af663dbf16b110d848d04ec4b5ee1fe3e6bf4bc28bbad4aff5ca27d85ed53"
+        },
+        {
+            "date": 1741770798856,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-12-15-error.log",
+            "hash": "c4d32d026f5a5f50cfa97a2bead9136beeba0d4d95b493b1a7e4e5a484877e7b"
+        },
+        {
+            "date": 1741775149525,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-12-16-error.log",
+            "hash": "9334c8d7e62fed37c03b0a785e1c5f540a1513554568b770cd7dcbc4359724de"
+        },
+        {
+            "date": 1741822395466,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-13-05-error.log",
+            "hash": "4228290e55bb2be21a6c5d7a3b8928ea1f850811913fe8c25ae76d19c0a2045b"
         }
     ],
     "hashType": "sha256"
