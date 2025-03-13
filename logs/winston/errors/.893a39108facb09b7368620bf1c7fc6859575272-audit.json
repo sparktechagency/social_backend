@@ -59,6 +59,11 @@
             "date": 1741822395466,
             "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-13-05-error.log",
             "hash": "4228290e55bb2be21a6c5d7a3b8928ea1f850811913fe8c25ae76d19c0a2045b"
+        },
+        {
+            "date": 1741824202287,
+            "name": "/home/mir/dev/projects/social_backend/logs/winston/errors/um-2025-03-13-06-error.log",
+            "hash": "aecfa9c545905e809597cc7dd099d9336d4b29ae1278ef028e1262a63b3da7c5"
         }
     ],
     "hashType": "sha256"

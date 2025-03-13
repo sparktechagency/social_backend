@@ -32,22 +32,7 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/social-backend:latest .
-        env:
-          ATLAS_URI: ${{ secrets.ATLAS_URI }}
-          CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
-          CLOUD_API_SECRET: ${{ secrets.CLOUD_API_SECRET }}
-          CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
-          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-          PORT: ${{ secrets.PORT }}
+
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -84,5 +69,6 @@ jobs:
               -e PORT="${{ secrets.PORT }}" \
               -e STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
               -e STRIPE_WEBHOOK_SECRET="${{ secrets.STRIPE_WEBHOOK_SECRET }}"\
+              -e OTP_LENGTH="${{ secrets.OTP_LENGTH }}" \
               ghcr.io/${{ github.repository_owner }}/social-backend:latest
             docker image prune -f

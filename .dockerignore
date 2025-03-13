@@ -3,3 +3,6 @@ Dockerfile
 .dockerignore
 .env
 .github
+.prettierignore
+.prettierrc.json
+logs

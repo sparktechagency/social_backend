@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8000;
 
 async function startServer() {
   try {
-    await connectDB("social");
+    await connectDB();
 
     const server = http.createServer(app);
     initializeSocket(server);
