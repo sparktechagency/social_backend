@@ -6,6 +6,7 @@ import User from "@models/userModel";
 import { Types } from "mongoose";
 
 const create = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  req.body.host = req.user.userId;
   const activity = new Activity(req.body);
   await activity.save();
   return res.status(StatusCodes.CREATED).json({

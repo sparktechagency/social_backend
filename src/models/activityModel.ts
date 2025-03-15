@@ -1,6 +1,7 @@
-import { Document, model, Schema } from "mongoose";
+import { Document, model, Schema, Types } from "mongoose";
 
 export type ActivitySchema = Document & {
+  host: Types.ObjectId;
   thumbnail: string;
   venue: string;
   name: string;
@@ -28,9 +29,11 @@ export type ActivitySchema = Document & {
   isPaid: boolean;
   fee: number;
   attendees: number;
+  attendeesIds: Types.ObjectId[];
 };
 
 const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
+  host: {type: Schema.Types.ObjectId, required: true},
   thumbnail: { type: String, required: true },
   venue: { type: String, default: "" },
   name: { type: String, required: true },
@@ -67,6 +70,7 @@ const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
   isPaid: { type: Boolean, default: false },
   fee: { type: Number, default: 0 },
   attendees: { type: Number, default: 0},
+  attendeesIds: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
 });
 
 activitySchema.index({ location: "2dsphere" });

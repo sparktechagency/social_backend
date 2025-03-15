@@ -40,7 +40,7 @@ routes.forEach((route) => {
 });
 
 app.use("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("Hello From the basic server");
+  res.send("Hello From the slyd social server");
 });
 
 app.use("/**", notFound);
