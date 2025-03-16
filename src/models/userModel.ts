@@ -34,6 +34,7 @@ export type UserSchema = Document & {
   hairColor: string;
   profession: string;
   bio: string;
+  friends: Types.ObjectId[];
 };
 
 const userSchema = new Schema(
@@ -61,7 +62,8 @@ const userSchema = new Schema(
     interests: [{ type: String }],
     hairColor: { type: String, default: "" },
     profession: { type: String, default: "" },
-    bio: { type: String, default: "" }
+    bio: { type: String, default: "" },
+    friends: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
   },
   {
     timestamps: true

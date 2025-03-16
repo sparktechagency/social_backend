@@ -16,7 +16,6 @@ const create = async (req: Request, res: Response, next: NextFunction): Promise<
   });
 };
 
-
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { lat, lng } = req.query;
   const page = Number.parseInt(req.query.page as string) || 1;
@@ -64,7 +63,7 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
 };
 
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const activity = await Activity.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const activity = await Activity.findByIdAndUpdate(req.params.id, { $set: req.body}, { new: true });
   if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found");
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: activity });
 };
