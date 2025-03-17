@@ -17,8 +17,6 @@
 **/test
 **/tests
 **/jest.config.*
-**/tsconfig.json
-**/tsconfig.*.json
 **/pnpm-debug.log
 **/.prettier*
 **/src/**/*.spec.ts
