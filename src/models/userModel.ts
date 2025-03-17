@@ -1,5 +1,6 @@
 import { calculateAge } from "@utils/calculateAge";
 import { Schema, model, Types, Document } from "mongoose";
+import Activity from "@models/activityModel";
 
 export type DecodedUser = {
   authId: string;
@@ -35,6 +36,7 @@ export type UserSchema = Document & {
   profession: string;
   bio: string;
   friends: Types.ObjectId[];
+  activities: Types.ObjectId[];
 };
 
 const userSchema = new Schema(
@@ -64,6 +66,7 @@ const userSchema = new Schema(
     profession: { type: String, default: "" },
     bio: { type: String, default: "" },
     friends: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
+    activities: [{type: Schema.Types.ObjectId, ref: "Activity", default: []}],
   },
   {
     timestamps: true
@@ -85,6 +88,13 @@ userSchema.pre("findOneAndUpdate", function(next) {
   }
   next();
 });
+
+userSchema.pre("findOneAndDelete", async function(next) {
+  const user = await this.findOne(this.getQuery());
+  if(!user) return next();
+  await User.updateMany({friends: user._id}, {$pull: {friends: user._id}});
+  await Activity.deleteMany({_id: {$in: user.activities}});
+})
 
 export const User = model<UserSchema>("User", userSchema);
 export default User;
