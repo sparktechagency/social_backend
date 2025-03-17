@@ -5,8 +5,7 @@ import { authorize } from "@middlewares/authorization";
 const router = express.Router();
 
 router.post("/create", authorize, asyncHandler(ActivityController.create));
-// router.get("/:id", asyncHandler(ActivityController.getById));
-router.get("/", asyncHandler(ActivityController.get));
+router.get("/", authorize, asyncHandler(ActivityController.get));
 router.patch("/update/:id", asyncHandler(ActivityController.update));
 router.delete("/delete/:id", asyncHandler(ActivityController.remove));
 
