@@ -32,7 +32,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
     mobileNumber,
   });
   await user.save({session});
-  await sendEmail(email, auth.verificationOTP);
+  // await sendEmail(email, auth.verificationOTP);
 
   return res.status(StatusCodes.CREATED).json({
     success: true,
@@ -112,7 +112,7 @@ const resendOTP = async (req: Request, res: Response, next: NextFunction): Promi
   if (status === "activate" && !auth.isVerified) {
     auth.generateVerificationOTP();
     await auth.save();
-    await sendEmail(email, auth.verificationOTP);
+    // await sendEmail(email, auth.verificationOTP);
     return res
       .status(StatusCodes.OK)
       .json({ success: true, message: "OTP resend successful", data: { otp: auth.verificationOTP } });
@@ -121,7 +121,7 @@ const resendOTP = async (req: Request, res: Response, next: NextFunction): Promi
   if (status === "recovery") {
     auth.generateRecoveryOTP();
     await auth.save();
-    await sendEmail(email, auth.recoveryOTP);
+    // await sendEmail(email, auth.recoveryOTP);
     return res.status(StatusCodes.OK).json({ success: true, message: "OTP resend successful", data: { otp: auth.recoveryOTP } });
   }
 };
