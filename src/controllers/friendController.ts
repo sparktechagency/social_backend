@@ -23,7 +23,7 @@ const friendRequestAction = async(req: Request, res: Response, next: NextFunctio
 
 const getFriends = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
     const user = await User.findById(req.user.userId).select("friends").populate("friends").lean();
-    res.status(StatusCodes.CREATED).json({success: true, message: "Success", data: user!.friends});
+    res.status(StatusCodes.CREATED).json({success: true, message: "Success", data: user!.friends || []});
 }
 
 const FriendController = {
