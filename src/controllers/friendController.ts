@@ -3,6 +3,23 @@ import User from "@models/userModel";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
+const findFriends = async(req: Request, res: Response, next:NextFunction): Promise<any> => {
+    const page = Number.parseInt(req.query.page as string) || 1;
+    const limit = Number.parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const user = await User.findById(req.user.userId).populate("friends").lean();
+    const friendIds = (user!.friends || []).map((friend: any) => friend._id);
+    const [users, total] = await Promise.all([User.find({_id: { $ne : req.user.userId, $nin: friendIds}}).populate({ path: "auth", select: "email" }).skip(skip).limit(limit).lean(), User.countDocuments({_id: { $ne : req.user.userId, $nin: friendIds}})]);
+    const totalPages = Math.ceil(total / limit);
+    return res.status(StatusCodes.OK).json({success: true, message: "Success", data: {users: users || [], pagination: {
+        page,
+        limit,
+        total,
+        totalPages: totalPages
+      }}})
+}
+
 const sendFriendRequest = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
     const existingRequest = await Friend.findOne({ requester: req.user.userId, recipient: req.body.recipient, status: "pending" });
     if (existingRequest) {
