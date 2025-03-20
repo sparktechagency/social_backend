@@ -30,6 +30,7 @@ export type ActivitySchema = Document & {
   fee: number;
   attendees: number;
   attendeesIds: Types.ObjectId[];
+  attendeesRequests: Types.ObjectId[];
 };
 
 const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
@@ -71,6 +72,7 @@ const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
   fee: { type: Number, default: 0 },
   attendees: { type: Number, default: 0},
   attendeesIds: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
+  attendeesRequests: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
 });
 
 activitySchema.index({ location: "2dsphere" });
