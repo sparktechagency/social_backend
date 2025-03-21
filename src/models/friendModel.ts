@@ -1,14 +1,14 @@
 import { Document, model, Schema, Types } from "mongoose";
 
 export type FriendSchema = Document & {
-    requester: Types.ObjectId;
-    recipient: Types.ObjectId;
+    sender: Types.ObjectId;
+    receiver: Types.ObjectId;
     status: string;
 }
 
 const frinedSchema = new Schema<FriendSchema> ({
-    requester: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    recipient: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
     status: { type: String, enum: ["pending", "accepted", "rejected"], default: "pending" },
 }, 
     {timestamps: true}
