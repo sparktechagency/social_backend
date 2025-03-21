@@ -85,7 +85,7 @@ const activityRequestAction = async (req: Request, res: Response, next: NextFunc
   const user = await User.findById(userId);
   if (!user) throw createError(StatusCodes.NOT_FOUND, "User Not found!");
 
-  if (!activity.attendeesRequests.map((id) => id.toString).includes(userId.toString()))
+  if (!activity.attendeesRequests.map((id) => id.toString()).includes(userId.toString()))
     throw createError(StatusCodes.BAD_REQUEST, "No request found by the user");
 
   if (action === "accept") activity.attendeesIds.push(userId);
