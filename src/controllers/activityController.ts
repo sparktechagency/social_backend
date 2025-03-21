@@ -13,9 +13,35 @@ const create = async (req: Request, res: Response, next: NextFunction): Promise<
   return res.status(StatusCodes.CREATED).json({
     success: true,
     message: "Activity created successfully.",
-    data: activity
+    data: activity,
   });
 };
+
+/**
+ * Retrieves activities based on various filters such as ID, search, user context (mine, friends, joined), and location.
+ *
+ * @query {number} [page=1] - Pagination page number.
+ * @query {number} [limit=10] - Number of items per page.
+ * @query {string} [search] - Search term for activity name or type.
+ * @query {string} [id] - Activity ID to retrieve a specific activity.
+ * @query {boolean} [mine] - If "true", retrieves activities hosted by the current user.
+ * @query {boolean} [friends] - If "true", retrieves activities hosted by the user's friends (separate public/private).
+ * @query {boolean} [joined] - If "true", retrieves activities the user has joined.
+ * @query {number} [lat] - Latitude for nearby activities.
+ * @query {number} [lng] - Longitude for nearby activities.
+ *
+ * @returns {Object} JSON response containing:
+ * - **popularPublic**: Top 10 most popular public activities (sorted by attendees).
+ * - **popularPrivate**: Top 10 most popular private activities.
+ * - **nearbyPublic**: Top 10 nearby public activities.
+ * - **nearbyPrivate**: Top 10 nearby private activities.
+ * - **activitiesPublic**: Paginated list of remaining public activities.
+ * - **activitiesPrivate**: Paginated list of remaining private activities.
+ * - **friendsPublic**: Paginated list of friends' public activities.
+ * - **friendsPrivate**: Paginated list of friends' private activities.
+ * - **mine**: Paginated list of activities hosted by the user.
+ * - **joined**: Paginated list of activities the user has joined.
+ */
 
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const page = Number.parseInt(req.query.page as string) || 1;
@@ -25,78 +51,99 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
 
   const baseFilter: any = {};
   if (search) {
-    const searchRegex = new RegExp(search as string, 'i');
-    baseFilter.$or = [
-      { name: searchRegex },
-      { activityType: searchRegex }
-    ];
+    const searchRegex = new RegExp(search as string, "i");
+    baseFilter.$or = [{ name: searchRegex }, { activityType: searchRegex }];
   }
 
   if (req.query.id) {
     const activity = await Activity.findById(new Types.ObjectId(req.query.id as string)).lean();
-    if(!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found!");
-    return res.status(StatusCodes.OK).json({ 
-      success: true, 
-      message: "Success", 
-      data: activity 
+    if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found!");
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Success",
+      data: activity,
     });
   }
 
   const mine = req.query.mine as string;
   const friends = req.query.friends as string;
-  if (mine || friends) {
-    const user = await User.findById(req.user.userId).select("friends").lean()!;
+  const joined = req.query.joined as string;
+
+  if (mine || friends || joined) {
+    const userId = req.user.userId;
     const responseData: any = {};
+    let activities: any[] = [];
+    let total: number = 0;
+    let filter: any;
 
     if (mine === "true") {
-      const filter = { ...baseFilter, host: user!._id };
-      const [activities, total] = await Promise.all([
+      filter = { host: userId };
+      [activities, total] = await Promise.all([
         Activity.find(filter).skip(skip).limit(limit).lean(),
-        Activity.countDocuments(filter)
+        Activity.countDocuments(filter),
       ]);
-      
+
       responseData.mine = {
         activities,
         metadata: {
           page,
           limit,
           total,
-          totalPages: Math.ceil(total / limit)
-        }
+          totalPages: Math.ceil(total / limit),
+        },
       };
-    }
-
-    if (friends === "true") {
-      const filter = { ...baseFilter, host: { $in: user!.friends } };
-      const [activities, total] = await Promise.all([
+    } else if (joined === "true") {
+      filter = { attendeesIds: userId };
+      [activities, total] = await Promise.all([
         Activity.find(filter).skip(skip).limit(limit).lean(),
-        Activity.countDocuments(filter)
+        Activity.countDocuments(filter),
       ]);
 
-      responseData.friends = {
+      responseData.joined = {
         activities,
         metadata: {
           page,
           limit,
           total,
-          totalPages: Math.ceil(total / limit)
-        }
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    } else if (friends === "true") {
+      const user = await User.findById(userId).select("friends").lean();
+      const friendIds = user?.friends || [];
+
+      const [publicActivities, publicTotal, privateActivities, privateTotal] = await Promise.all([
+        Activity.find({ host: { $in: friendIds }, isPrivateActivity: false })
+          .skip(skip)
+          .limit(limit)
+          .lean(),
+        Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: false }),
+
+        Activity.find({ host: { $in: friendIds }, isPrivateActivity: true })
+          .skip(skip)
+          .limit(limit)
+          .lean(),
+        Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: true }),
+      ]);
+
+      responseData.friendsPublic = {
+        activities: publicActivities,
+        metadata: { page, limit, total: publicTotal, totalPages: Math.ceil(publicTotal / limit) },
+      };
+
+      responseData.friendsPrivate = {
+        activities: privateActivities,
+        metadata: { page, limit, total: privateTotal, totalPages: Math.ceil(privateTotal / limit) },
       };
     }
-
-    return res.status(StatusCodes.OK).json({
-      success: true,
-      message: "Success",
-      data: responseData
-    });
   }
 
   const { lat, lng } = req.query;
-  
+
   if (!lat || !lng || isNaN(parseFloat(lat as string)) || isNaN(parseFloat(lng as string))) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
-      message: "Valid latitude and longitude parameters are required"
+      message: "Valid latitude and longitude parameters are required",
     });
   }
 
@@ -104,61 +151,84 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   const parsedLng = parseFloat(lng as string);
   const user = await User.findById(req.user.userId)!;
 
-  const popularFilter = { ...baseFilter };
-  const popularActivities = await Activity.find(popularFilter)
+  const popularPublic = await Activity.find({ ...baseFilter, isPrivateActivity: false })
     .sort({ attendees: -1 })
     .limit(10)
     .lean();
-  const popularIds = popularActivities.map(a => a._id);
 
-  const nearbyFilter = {
-    ...baseFilter,
-    _id: { $nin: popularIds },
-    location: {
-      $near: {
-        $geometry: {
-          type: "Point",
-          coordinates: [parsedLng, parsedLat]
-        },
-        $maxDistance: user!.distancePreference
-      }
-    }
-  };
-  
-  const nearbyActivities = await Activity.find(nearbyFilter)
+  const popularPrivate = await Activity.find({ ...baseFilter, isPrivateActivity: true })
+    .sort({ attendees: -1 })
     .limit(10)
     .lean();
-  const nearbyIds = nearbyActivities.map(a => a._id);
 
-  const remainingFilter = {
+  const popularIds = [...popularPublic.map((a) => a._id), ...popularPrivate.map((a) => a._id)];
+
+  const nearbyPublic = await Activity.find({
     ...baseFilter,
-    _id: { $nin: [...popularIds, ...nearbyIds] }
-  };
+    _id: { $nin: popularIds },
+    isPrivateActivity: false,
+    location: {
+      $near: {
+        $geometry: { type: "Point", coordinates: [parsedLng, parsedLat] },
+        $maxDistance: user!.distancePreference,
+      },
+    },
+  })
+    .limit(10)
+    .lean();
 
-  const [activities, total] = await Promise.all([
-    Activity.find(remainingFilter).skip(skip).limit(limit).lean(),
-    Activity.countDocuments(remainingFilter)
+  const nearbyPrivate = await Activity.find({
+    ...baseFilter,
+    _id: { $nin: popularIds },
+    isPrivateActivity: true,
+    location: {
+      $near: {
+        $geometry: { type: "Point", coordinates: [parsedLng, parsedLat] },
+        $maxDistance: user!.distancePreference,
+      },
+    },
+  })
+    .limit(10)
+    .lean();
+
+  const nearbyIds = [...nearbyPublic.map((a) => a._id), ...nearbyPrivate.map((a) => a._id)];
+
+  const [activitiesPublic, activitiesPublicTotal, activitiesPrivate, activitiesPrivateTotal] = await Promise.all([
+    Activity.find({ ...baseFilter, _id: { $nin: [...popularIds, ...nearbyIds] }, isPrivateActivity: false })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Activity.countDocuments({ ...baseFilter, _id: { $nin: [...popularIds, ...nearbyIds] }, isPrivateActivity: false }),
+
+    Activity.find({ ...baseFilter, _id: { $nin: [...popularIds, ...nearbyIds] }, isPrivateActivity: true })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Activity.countDocuments({ ...baseFilter, _id: { $nin: [...popularIds, ...nearbyIds] }, isPrivateActivity: true }),
   ]);
 
   return res.status(StatusCodes.OK).json({
     success: true,
     message: "Success",
     data: {
-      popularActivities,
-      nearbyActivities,
-      activities,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit)
-      }
-    }
+      popularPublic,
+      popularPrivate,
+      nearbyPublic,
+      nearbyPrivate,
+      activitiesPublic: {
+        activities: activitiesPublic,
+        metadata: { page, limit, total: activitiesPublicTotal, totalPages: Math.ceil(activitiesPublicTotal / limit) },
+      },
+      activitiesPrivate: {
+        activities: activitiesPrivate,
+        metadata: { page, limit, total: activitiesPrivateTotal, totalPages: Math.ceil(activitiesPrivateTotal / limit) },
+      },
+    },
   });
 };
 
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const activity = await Activity.findByIdAndUpdate(req.params.id, { $set: req.body}, { new: true });
+  const activity = await Activity.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
   if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found");
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: activity });
 };
@@ -173,8 +243,7 @@ const ActivityController = {
   create,
   get,
   update,
-  remove
+  remove,
 };
 
 export default ActivityController;
-
