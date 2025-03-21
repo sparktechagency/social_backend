@@ -11,6 +11,7 @@ router.patch("/update/:id", asyncHandler(ActivityController.update));
 router.delete("/delete/:id", asyncHandler(ActivityController.remove));
 
 router.post("/attend-activity", authorize, asyncHandler(ActivityServices.attendActivity));
+router.post("/cancel-attendance", authorize, asyncHandler(ActivityServices.cancelAttendingActivity));
 router.post("/cancel-request", authorize, asyncHandler(ActivityServices.cancelRequest));
 router.get("/get-activity-requests", authorize, asyncHandler(ActivityServices.getActivityRequests));
 router.post("/activity-request-action", authorize, asyncHandler(ActivityServices.activityRequestAction));

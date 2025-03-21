@@ -18,6 +18,17 @@ const attendActivity = async (req: Request, res: Response, next: NextFunction): 
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: {} });
 };
 
+const cancelAttendingActivity = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const userId = req.user.userId;
+  const activity = await Activity.findById(req.body.id);
+  if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity Not found!");
+  if (activity.attendeesIds.includes(userId)) {
+    activity.attendeesIds = activity.attendeesIds.filter((attendeesId) => attendeesId !== userId);
+    await activity.save();
+  }
+  return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: {} });
+};
+
 const cancelRequest = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const activity = await Activity.findById(req.body.id);
   const userId = req.user.userId;
@@ -74,6 +85,7 @@ const activityRequestAction = async (req: Request, res: Response, next: NextFunc
 
 const ActivityServices = {
   attendActivity,
+  cancelAttendingActivity,
   cancelRequest,
   getActivityRequests,
   activityRequestAction,
