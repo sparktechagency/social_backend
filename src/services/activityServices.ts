@@ -44,7 +44,7 @@ const cancelRequest = async (req: Request, res: Response, next: NextFunction): P
 
   if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity Not found!");
 
-  if (!activity.attendeesIds.map((id) => id.toString()).includes(userId.toString())) {
+  if (!activity.attendeesRequests.map((id) => id.toString()).includes(userId.toString())) {
     throw createError(StatusCodes.BAD_REQUEST, "User is not attending this activity");
   }
 
