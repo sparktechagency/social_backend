@@ -48,7 +48,9 @@ const cancelRequest = async (req: Request, res: Response, next: NextFunction): P
     throw createError(StatusCodes.BAD_REQUEST, "User is not attending this activity");
   }
 
-  activity.attendeesRequests = activity.attendeesRequests.filter((attendeesId) => attendeesId !== userId);
+  activity.attendeesRequests = activity.attendeesRequests.filter(
+    (attendeesId) => attendeesId.toString() !== userId.toString()
+  );
   await activity.save();
 
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: {} });
