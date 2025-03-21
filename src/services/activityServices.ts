@@ -21,12 +21,21 @@ const attendActivity = async (req: Request, res: Response, next: NextFunction): 
 const cancelAttendingActivity = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const userId = req.user.userId;
   const activity = await Activity.findById(req.body.id);
-  if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity Not found!");
-  if (activity.attendeesIds.includes(userId)) {
-    activity.attendeesIds = activity.attendeesIds.filter((attendeesId) => attendeesId !== userId);
-    await activity.save();
+
+  if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found!");
+
+  if (!activity.attendeesIds.map((id) => id.toString()).includes(userId.toString())) {
+    throw createError(StatusCodes.BAD_REQUEST, "User is not attending this activity");
   }
-  return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: {} });
+
+  activity.attendeesIds = activity.attendeesIds.filter((attendeesId) => attendeesId.toString() !== userId.toString());
+  activity.attendees = Math.max(activity.attendees - 1, 0);
+
+  await activity.save();
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ success: true, message: "Successfully canceled attendance", data: activity });
 };
 
 const cancelRequest = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
