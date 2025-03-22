@@ -140,12 +140,12 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
 
   const { lat, lng } = req.query;
 
-  if (!lat && !lng && isNaN(parseFloat(lat as string)) && isNaN(parseFloat(lng as string))) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      success: false,
-      message: "Valid latitude and longitude parameters are required",
-    });
-  }
+  // if (!lat && !lng && isNaN(parseFloat(lat as string)) && isNaN(parseFloat(lng as string))) {
+  //   return res.status(StatusCodes.BAD_REQUEST).json({
+  //     success: false,
+  //     message: "Valid latitude and longitude parameters are required",
+  //   });
+  // }
 
   const parsedLat = parseFloat(lat as string);
   const parsedLng = parseFloat(lng as string);
