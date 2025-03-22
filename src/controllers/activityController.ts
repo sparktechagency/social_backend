@@ -136,16 +136,22 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
         metadata: { page, limit, total: privateTotal, totalPages: Math.ceil(privateTotal / limit) },
       };
     }
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Success",
+      data: responseData,
+    })
   }
 
   const { lat, lng } = req.query;
 
-  // if (!lat && !lng && isNaN(parseFloat(lat as string)) && isNaN(parseFloat(lng as string))) {
-  //   return res.status(StatusCodes.BAD_REQUEST).json({
-  //     success: false,
-  //     message: "Valid latitude and longitude parameters are required",
-  //   });
-  // }
+  if (!lat && !lng && isNaN(parseFloat(lat as string)) && isNaN(parseFloat(lng as string))) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      success: false,
+      message: "Valid latitude and longitude parameters are required",
+      data: {},
+    });
+  }
 
   const parsedLat = parseFloat(lat as string);
   const parsedLng = parseFloat(lng as string);
