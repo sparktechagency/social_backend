@@ -56,7 +56,7 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   }
 
   if (req.query.id) {
-    const activity = await Activity.findById(new Types.ObjectId(req.query.id as string)).lean();
+    const activity = await Activity.findById(new Types.ObjectId(req.query.id as string)).populate("host").populate("attendeesIds").lean();
     if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found!");
     return res.status(StatusCodes.OK).json({
       success: true,
