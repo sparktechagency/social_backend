@@ -13,9 +13,9 @@ versionSchema.statics.findOrCreate = async function (): Promise<void> {
   const version = await this.findOne();
   if(!version) {
     await this.create({text: "Version"});
-    logger.info("Version Information added successfully!");
+    logger.info("Version information added successfully!");
   } else {
-    logger.info("Version Information exists!");
+    logger.info("Version information exists!");
   }
 }
 

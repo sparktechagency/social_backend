@@ -15,9 +15,9 @@ privacySchema.statics.findOrCreate = async function (): Promise<void> {
   const privacy = await this.findOne();
   if(!privacy) {
     await this.create({text: "Privacy Policy"});
-    logger.info("Privacy Policy added successfully!");
+    logger.info("Privacy policy added successfully!");
   } else {
-    logger.info("Privacy Policy exists!");
+    logger.info("Privacy policy exists!");
   }
 }
 

@@ -11,7 +11,7 @@ router.post("/cancel-friend-request", authorize, asyncHandler(FriendController.c
 router.get("/get-friend-requests", authorize, asyncHandler(FriendController.getFriendRequests));
 router.post("/friend-request-action", authorize, asyncHandler(FriendController.friendRequestAction));
 router.get("/get-friends", authorize, asyncHandler(FriendController.getFriends));
-router.post("/remove-friend", authorize, asyncHandler(FriendController.removeFriend));
+router.delete("/remove-friend", authorize, asyncHandler(FriendController.removeFriend));
 router.get("/get-mutual-friends", authorize, asyncHandler(FriendController.getMutualFriends));
 
 export default router;

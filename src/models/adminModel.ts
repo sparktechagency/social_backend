@@ -102,9 +102,9 @@ adminSchema.statics.findOrCreate = async function (): Promise<void> {
       password: hashedPassword,
     });
 
-    logger.info("admin created successfully");
+    logger.info("Admin created successfully");
   } else {
-    logger.info("admin account exists");
+    logger.info("Admin account exists");
   }
 };
 
