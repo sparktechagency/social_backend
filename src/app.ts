@@ -21,14 +21,14 @@ app.use(
   cors({
     origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
-    credentials: true,
+    credentials: false,
   })
 );
 
 const routes = [
   { path: "/auth", router: AuthRouter },
   { path: "/user", router: UserRouter },
-  { path: "/activity", router: ActivityRouter},
+  { path: "/activity", router: ActivityRouter },
   { path: "/faq", router: FaqRouter },
   { path: "/tac", router: TaCRouter },
   { path: "/privacy", router: PrivacyRouter },
