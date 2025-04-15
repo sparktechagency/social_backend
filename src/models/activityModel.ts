@@ -34,7 +34,7 @@ export type ActivitySchema = Document & {
 };
 
 const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
-  host: {type: Schema.Types.ObjectId, required: true},
+  host: { type: Schema.Types.ObjectId, ref: "User", required: true },
   thumbnail: { type: String, required: true },
   venue: { type: String, default: "" },
   name: { type: String, required: true },
@@ -49,19 +49,19 @@ const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
       type: String,
       enum: ["Point"],
       default: "Point",
-      required: true
+      required: true,
     },
     coordinates: {
       type: [Number],
       required: true,
-      index: "2dsphere"
+      index: "2dsphere",
     },
-    address: { type: String, required: true }
+    address: { type: String, required: true },
   },
   distanceRange: { type: Number, required: true },
   ageRange: {
     low: { type: Number, required: true },
-    high: { type: Number, required: true }
+    high: { type: Number, required: true },
   },
   note: { type: String, required: true },
   isGuestsAllowed: { type: Boolean, default: false },
@@ -70,9 +70,9 @@ const activitySchema: Schema<ActivitySchema> = new Schema<ActivitySchema>({
   isGroupChatEnabled: { type: Boolean, default: false },
   isPaid: { type: Boolean, default: false },
   fee: { type: Number, default: 0 },
-  attendees: { type: Number, default: 0},
-  attendeesIds: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
-  attendeesRequests: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
+  attendees: { type: Number, default: 0 },
+  attendeesIds: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  attendeesRequests: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
 });
 
 activitySchema.index({ location: "2dsphere" });

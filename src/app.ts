@@ -11,6 +11,7 @@ import { requestLogger } from "@middlewares/requestLogger";
 import ContactRouter from "@routes/contactRouter";
 import VersionRouter from "@routes/versionRouter";
 import ActivityRouter from "@routes/activityRouter";
+import FriendRequestRouter from "@routes/friendRequestRouter";
 import FriendRouter from "@routes/friendRouter";
 
 const app = express();
@@ -34,6 +35,7 @@ const routes = [
   { path: "/privacy", router: PrivacyRouter },
   { path: "/contact", router: ContactRouter },
   { path: "/version", router: VersionRouter },
+  { path: "/friend-request", router: FriendRequestRouter },
   { path: "/friend", router: FriendRouter },
 ];
 

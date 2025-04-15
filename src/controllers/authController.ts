@@ -11,7 +11,9 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
 
   let auth = await Auth.findByEmail(email);
   if (auth) {
-    const message = auth.isVerified ? "Email already exists! Please login." : "Email already exists! Please verify your account";
+    const message = auth.isVerified
+      ? "Email already exists! Please login."
+      : "Email already exists! Please verify your account";
     return res
       .status(StatusCodes.CONFLICT)
       .json({ success: false, message: message, data: { isVerified: auth.isVerified } });
@@ -31,8 +33,8 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
     name,
     mobileNumber,
   });
-  await user.save({session});
-  // await sendEmail(email, auth.verificationOTP);
+  await user.save({ session });
+  await sendEmail(email, auth.verificationOTP);
 
   return res.status(StatusCodes.CREATED).json({
     success: true,
@@ -50,8 +52,7 @@ const activate = async (req: Request, res: Response, next: NextFunction): Promis
   if (!auth.isCorrectVerificationOTP(otp))
     throw createError(StatusCodes.UNAUTHORIZED, "Wrong OTP. Please enter the correct code");
 
-  if (auth.isVerificationOTPExpired())
-    throw createError(StatusCodes.UNAUTHORIZED, "Verification OTP has expired.");
+  if (auth.isVerificationOTPExpired()) throw createError(StatusCodes.UNAUTHORIZED, "Verification OTP has expired.");
 
   auth.clearVerificationOTP();
   auth.isVerified = true;
@@ -95,7 +96,7 @@ const signInWithGoogle = async (req: Request, res: Response, next: NextFunction)
   return res.status(StatusCodes.OK).json({
     success: true,
     message: "Login successful",
-    data: { accessToken: accessToken},
+    data: { accessToken: accessToken },
   });
 };
 
@@ -122,7 +123,9 @@ const resendOTP = async (req: Request, res: Response, next: NextFunction): Promi
     auth.generateRecoveryOTP();
     await auth.save();
     // await sendEmail(email, auth.recoveryOTP);
-    return res.status(StatusCodes.OK).json({ success: true, message: "OTP resend successful", data: { otp: auth.recoveryOTP } });
+    return res
+      .status(StatusCodes.OK)
+      .json({ success: true, message: "OTP resend successful", data: { otp: auth.recoveryOTP } });
   }
 };
 
@@ -135,9 +138,7 @@ const recovery = async (req: Request, res: Response, next: NextFunction): Promis
 
   await sendEmail(email, auth.recoveryOTP);
   await auth.save();
-  return res
-    .status(StatusCodes.OK)
-    .json({ success: true, message: "Success", data: { otp: auth.recoveryOTP } });
+  return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: { otp: auth.recoveryOTP } });
 };
 
 const recoveryVerification = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -171,7 +172,9 @@ const resetPassword = async (req: Request, res: Response, next: NextFunction): P
 
   const accessToken = Auth.generateAccessToken(auth._id!.toString());
 
-  return res.status(StatusCodes.OK).json({ success: true, message: "Password reset successful", data: {accessToken: accessToken} });
+  return res
+    .status(StatusCodes.OK)
+    .json({ success: true, message: "Password reset successful", data: { accessToken: accessToken } });
 };
 
 const changePassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {

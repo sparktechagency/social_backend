@@ -1,6 +1,8 @@
 import { calculateAge } from "@utils/calculateAge";
 import { Schema, model, Types, Document } from "mongoose";
 import Activity from "@models/activityModel";
+import Friend from "@models/friendModel";
+import FriendRequest from "@models/friendRequestModel";
 
 export type DecodedUser = {
   authId: string;
@@ -17,6 +19,11 @@ export type UserSchema = Document & {
   mobileNumber: string;
   dateOfBirth: string;
   age: number;
+  location: {
+    type: "Point";
+    placeName: string;
+    coordinates: [number, number];
+  };
   gender: string;
   photo: string[];
   distancePreference: number;
@@ -35,8 +42,6 @@ export type UserSchema = Document & {
   hairColor: string;
   profession: string;
   bio: string;
-  friends: Types.ObjectId[];
-  activities: Types.ObjectId[];
 };
 
 const userSchema = new Schema(
@@ -46,17 +51,29 @@ const userSchema = new Schema(
     userName: { type: String },
     mobileNumber: { type: Number, required: true },
     dateOfBirth: { type: String },
-    age: {type: Number},
+    age: { type: Number },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      placeName: {
+        type: String,
+      },
+      coordinates: {
+        type: [Number],
+      },
+    },
     gender: { type: String },
     photo: [{ type: String }],
     distancePreference: { type: Number },
     school: {
       name: { type: String, default: "" },
-      year: { type: Number, default: null }
+      year: { type: Number, default: null },
     },
     height: {
       feet: { type: Number },
-      inch: { type: Number }
+      inch: { type: Number },
     },
     expectation: { type: String },
     relationshipStatus: { type: String, default: "" },
@@ -65,36 +82,48 @@ const userSchema = new Schema(
     hairColor: { type: String, default: "" },
     profession: { type: String, default: "" },
     bio: { type: String, default: "" },
-    friends: [{type: Schema.Types.ObjectId, ref: "User", default: []}],
-    activities: [{type: Schema.Types.ObjectId, ref: "Activity", default: []}],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-userSchema.pre("save", function(next) {
-  if(this.isModified("dateOfBirth") && this.dateOfBirth) {
+userSchema.index({ location: "2dsphere" });
+
+userSchema.pre("save", function (next) {
+  if (this.isModified("dateOfBirth") && this.dateOfBirth) {
     this.age = calculateAge(this.dateOfBirth);
   }
   next();
 });
+type UpdateUser = {
+  $set?: Partial<UserSchema>;
+  $setOnInsert?: Partial<UserSchema>;
+};
 
-userSchema.pre("findOneAndUpdate", function(next) {
-  const update = this.getUpdate() as Partial<UserSchema>;
-  if(update.dateOfBirth) {
-    update.age = calculateAge(update.dateOfBirth);
+userSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() as UpdateUser;
+
+  const dateOfBirth = update.$set?.dateOfBirth;
+
+  if (dateOfBirth) {
+    update.$set!.age = calculateAge(dateOfBirth);
     this.setUpdate(update);
   }
   next();
 });
 
-userSchema.pre("findOneAndDelete", async function(next) {
+userSchema.pre("findOneAndDelete", async function (next) {
   const user = await this.findOne(this.getQuery());
-  if(!user) return next();
-  await User.updateMany({friends: user._id}, {$pull: {friends: user._id}});
-  await Activity.deleteMany({_id: {$in: user.activities}});
-})
+  if (!user) return next();
+  const userId = this.getQuery()._id;
+
+  await Friend.deleteMany({ $or: [{ user1: userId }, { user2: userId }] });
+
+  await FriendRequest.deleteMany({ $or: [{ sender: userId }, { receiver: userId }] });
+
+  await Activity.deleteMany({ host: userId });
+});
 
 export const User = model<UserSchema>("User", userSchema);
 export default User;

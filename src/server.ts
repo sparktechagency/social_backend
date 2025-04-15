@@ -19,11 +19,11 @@ async function startServer() {
     const server = http.createServer(app);
     initializeSocket(server);
 
-    await Admin.findOrCreate();
-    await Privacy.findOrCreate();
-    await TaC.findOrCreate();
-    await Contract.findOrCreate();
-    await Version.findOrCreate();
+    // await Admin.findOrCreate();
+    // await Privacy.findOrCreate();
+    // await TaC.findOrCreate();
+    // await Contract.findOrCreate();
+    // await Version.findOrCreate();
 
     const shutdown = () => {
       logger.info("Shutting down server...");

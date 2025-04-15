@@ -17,32 +17,6 @@ const create = async (req: Request, res: Response, next: NextFunction): Promise<
   });
 };
 
-/**
- * Retrieves activities based on various filters such as ID, search, user context (mine, friends, joined), and location.
- *
- * @query {number} [page=1] - Pagination page number.
- * @query {number} [limit=10] - Number of items per page.
- * @query {string} [search] - Search term for activity name or type.
- * @query {string} [id] - Activity ID to retrieve a specific activity.
- * @query {boolean} [mine] - If "true", retrieves activities hosted by the current user.
- * @query {boolean} [friends] - If "true", retrieves activities hosted by the user's friends (separate public/private).
- * @query {boolean} [joined] - If "true", retrieves activities the user has joined.
- * @query {number} [lat] - Latitude for nearby activities.
- * @query {number} [lng] - Longitude for nearby activities.
- *
- * @returns {Object} JSON response containing:
- * - **popularPublic**: Top 10 most popular public activities (sorted by attendees).
- * - **popularPrivate**: Top 10 most popular private activities.
- * - **nearbyPublic**: Top 10 nearby public activities.
- * - **nearbyPrivate**: Top 10 nearby private activities.
- * - **activitiesPublic**: Paginated list of remaining public activities.
- * - **activitiesPrivate**: Paginated list of remaining private activities.
- * - **friendsPublic**: Paginated list of friends' public activities.
- * - **friendsPrivate**: Paginated list of friends' private activities.
- * - **mine**: Paginated list of activities hosted by the user.
- * - **joined**: Paginated list of activities the user has joined.
- */
-
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const page = Number.parseInt(req.query.page as string) || 1;
   const limit = Number.parseInt(req.query.limit as string) || 10;
@@ -56,7 +30,10 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   }
 
   if (req.query.id) {
-    const activity = await Activity.findById(new Types.ObjectId(req.query.id as string)).populate("host").populate("attendeesIds").lean();
+    const activity = await Activity.findById(new Types.ObjectId(req.query.id as string))
+      .populate("host")
+      .populate("attendeesIds")
+      .lean();
     if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found!");
     return res.status(StatusCodes.OK).json({
       success: true,
@@ -110,37 +87,38 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
       };
     } else if (friends === "true") {
       const user = await User.findById(userId).select("friends").lean();
-      const friendIds = user?.friends || [];
+      //   const friendIds = user?.friends || [];
 
-      const [publicActivities, publicTotal, privateActivities, privateTotal] = await Promise.all([
-        Activity.find({ host: { $in: friendIds }, isPrivateActivity: false })
-          .skip(skip)
-          .limit(limit)
-          .lean(),
-        Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: false }),
+      //   const [publicActivities, publicTotal, privateActivities, privateTotal] = await Promise.all([
+      //     Activity.find({ host: { $in: friendIds }, isPrivateActivity: false })
+      //       .skip(skip)
+      //       .limit(limit)
+      //       .lean(),
+      //     Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: false }),
 
-        Activity.find({ host: { $in: friendIds }, isPrivateActivity: true })
-          .skip(skip)
-          .limit(limit)
-          .lean(),
-        Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: true }),
-      ]);
+      //     Activity.find({ host: { $in: friendIds }, isPrivateActivity: true })
+      //       .skip(skip)
+      //       .limit(limit)
+      //       .lean(),
+      //     Activity.countDocuments({ host: { $in: friendIds }, isPrivateActivity: true }),
+      //   ]);
 
-      responseData.friendsPublic = {
-        activities: publicActivities,
-        metadata: { page, limit, total: publicTotal, totalPages: Math.ceil(publicTotal / limit) },
-      };
+      //   responseData.friendsPublic = {
+      //     activities: publicActivities,
+      //     metadata: { page, limit, total: publicTotal, totalPages: Math.ceil(publicTotal / limit) },
+      //   };
 
-      responseData.friendsPrivate = {
-        activities: privateActivities,
-        metadata: { page, limit, total: privateTotal, totalPages: Math.ceil(privateTotal / limit) },
-      };
+      //   responseData.friendsPrivate = {
+      //     activities: privateActivities,
+      //     metadata: { page, limit, total: privateTotal, totalPages: Math.ceil(privateTotal / limit) },
+      //   };
+      // }
+      // return res.status(StatusCodes.OK).json({
+      //   success: true,
+      //   message: "Success",
+      //   data: responseData,
+      // });
     }
-    return res.status(StatusCodes.OK).json({
-      success: true,
-      message: "Success",
-      data: responseData,
-    })
   }
 
   const { lat, lng } = req.query;

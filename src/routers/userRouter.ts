@@ -5,6 +5,7 @@ import { asyncHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
+router.get("/find-friends", authorize, asyncHandler(UserController.findFriends));
 router.get("/", authorize, asyncHandler(UserController.get));
 router.patch("/update", authorize, asyncHandler(UserController.update));
 
