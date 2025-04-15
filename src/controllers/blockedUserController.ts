@@ -18,7 +18,7 @@ const getAllBlockedUser = async (req: Request, res: Response, next: NextFunction
   const limit = Number.parseInt(req.query.limit as string) || 10;
   const skip = (page - 1) * limit;
   const [blockedUsers, total] = await Promise.all([
-    BlockedUser.find({ blocker: req.user.userId }).select("userName photo").skip(skip).limit(limit).lean(),
+    BlockedUser.find({ blocker: req.user.userId }).populate("blocked").skip(skip).limit(limit).lean(),
     BlockedUser.countDocuments({ blocker: req.user.userId }),
   ]);
   const totalPages = Math.ceil(total / limit);
@@ -37,9 +37,9 @@ const getAllBlockedUser = async (req: Request, res: Response, next: NextFunction
   });
 };
 
-const BlockController = {
+const BlockedUserController = {
   blockToggle,
   getAllBlockedUser,
 };
 
-export default BlockController;
+export default BlockedUserController;

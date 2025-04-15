@@ -13,6 +13,7 @@ import VersionRouter from "@routes/versionRouter";
 import ActivityRouter from "@routes/activityRouter";
 import FriendRequestRouter from "@routes/friendRequestRouter";
 import FriendRouter from "@routes/friendRouter";
+import BlockedUserRouter from "@routes/blockedUserRouter";
 
 const app = express();
 
@@ -29,14 +30,15 @@ app.use(
 const routes = [
   { path: "/auth", router: AuthRouter },
   { path: "/user", router: UserRouter },
+  { path: "/friend-request", router: FriendRequestRouter },
+  { path: "/friend", router: FriendRouter },
+  { path: "/blocked", router: BlockedUserRouter },
   { path: "/activity", router: ActivityRouter },
   { path: "/faq", router: FaqRouter },
   { path: "/tac", router: TaCRouter },
   { path: "/privacy", router: PrivacyRouter },
   { path: "/contact", router: ContactRouter },
   { path: "/version", router: VersionRouter },
-  { path: "/friend-request", router: FriendRequestRouter },
-  { path: "/friend", router: FriendRouter },
 ];
 
 routes.forEach((route) => {
