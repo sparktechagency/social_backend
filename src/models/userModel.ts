@@ -127,7 +127,6 @@ userSchema.post("findOneAndUpdate", async function (doc: UserSchema | null) {
     "gender",
     "photo",
     "distancePreference",
-    "school",
     "height",
     "expectation",
     "interests",
