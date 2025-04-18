@@ -42,6 +42,7 @@ export type UserSchema = Document & {
   hairColor: string;
   profession: string;
   bio: string;
+  isProfileComplete: boolean;
 };
 
 const userSchema = new Schema(
@@ -82,6 +83,7 @@ const userSchema = new Schema(
     hairColor: { type: String, default: "" },
     profession: { type: String, default: "" },
     bio: { type: String, default: "" },
+    isProfileComplete: { type: Boolean, default: false },
   },
   {
     timestamps: true,
@@ -111,6 +113,43 @@ userSchema.pre("findOneAndUpdate", function (next) {
     this.setUpdate(update);
   }
   next();
+});
+
+userSchema.post("findOneAndUpdate", async function (doc: UserSchema | null) {
+  if (!doc || doc.isProfileComplete) return;
+
+  const requiredFields: (keyof UserSchema)[] = [
+    "name",
+    "mobileNumber",
+    "dateOfBirth",
+    "age",
+    "location",
+    "gender",
+    "photo",
+    "distancePreference",
+    "school",
+    "height",
+    "expectation",
+    "interests",
+  ];
+
+  const isFilled = requiredFields.every((field) => {
+    const value = doc[field];
+    if (value === undefined || value === null) return false;
+
+    if (Array.isArray(value)) return value.length > 0;
+
+    if (typeof value === "object" && value !== null) {
+      return Object.values(value).every((val) => val !== undefined && val !== null && val !== "");
+    }
+
+    return value !== "";
+  });
+
+  if (isFilled) {
+    doc.isProfileComplete = true;
+    await doc.save();
+  }
 });
 
 userSchema.pre("findOneAndDelete", async function (next) {
