@@ -46,6 +46,9 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   const friends = req.query.friends as string;
   const joined = req.query.joined as string;
 
+  console.log(mine);
+  console.log(typeof mine);
+
   if (mine || friends || joined) {
     const userId = req.user.userId;
     const responseData: any = {};
@@ -113,12 +116,12 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
       //     metadata: { page, limit, total: privateTotal, totalPages: Math.ceil(privateTotal / limit) },
       //   };
       // }
-      // return res.status(StatusCodes.OK).json({
-      //   success: true,
-      //   message: "Success",
-      //   data: responseData,
-      // });
     }
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Success",
+      data: responseData,
+    });
   }
 
   const { lat, lng } = req.query;
