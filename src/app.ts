@@ -14,11 +14,9 @@ import ActivityRouter from "@routes/activityRouter";
 import FriendRequestRouter from "@routes/friendRequestRouter";
 import FriendRouter from "@routes/friendRouter";
 import BlockedUserRouter from "@routes/blockedUserRouter";
+import bodyParser from "body-parser";
 
 const app = express();
-
-app.use(requestLogger);
-app.use(express.json());
 app.use(
   cors({
     origin: "*",
@@ -26,6 +24,15 @@ app.use(
     credentials: false,
   })
 );
+app.use(requestLogger);
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+  res.send("Hello From the slyd social server");
+});
 
 const routes = [
   { path: "/auth", router: AuthRouter },
@@ -44,11 +51,6 @@ const routes = [
 routes.forEach((route) => {
   app.use(route.path, route.router);
 });
-
-app.use("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("Hello From the slyd social server");
-});
-
 app.use("/**", notFound);
 
 app.use(errorHandler);

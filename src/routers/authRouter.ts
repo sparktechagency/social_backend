@@ -5,7 +5,8 @@ import { asyncHandler, asyncSessionHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
-router.post("/register", asyncSessionHandler(AuthController.register));
+// router.post("/register", asyncSessionHandler(AuthController.register));
+router.post("/register", AuthController.register);
 router.post("/activate", asyncHandler(AuthController.activate));
 router.post("/login", asyncHandler(AuthController.login));
 router.post("/sign-in-with-google", asyncHandler(AuthController.signInWithGoogle));

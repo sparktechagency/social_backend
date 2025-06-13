@@ -1,7 +1,7 @@
 import http from "http";
 import app from "./app";
-import "dotenv/config";
 import { connectDB } from "@connection/atlasDB";
+// import { connectDB } from "@connection/db";
 import { logger } from "@shared/logger";
 import initializeSocket from "./socket";
 import Admin from "@models/adminModel";
@@ -9,11 +9,14 @@ import Privacy from "@models/privacyModel";
 import TaC from "@models/tacModel";
 import Contract from "@models/contactModel";
 import Version from "@models/versionModel";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 
 async function startServer() {
   try {
+    // await connectDB(process.env.ATLAS_URI as string);
     await connectDB();
 
     const server = http.createServer(app);
