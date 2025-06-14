@@ -7,6 +7,8 @@ import FriendRequest from "@models/friendRequestModel";
 import BlockedUser from "@models/blockedUserModel";
 import { Types } from "mongoose";
 import { checkFriendRequest } from "@services/friendRequestServices";
+import path from "path";
+import { unlink } from "fs";
 
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const isAll = req.query.all;
@@ -54,7 +56,7 @@ const findFriends = async (req: Request, res: Response, next: NextFunction): Pro
   const skip = (page - 1) * limit;
 
   const currentUser = await User.findById(userId).select("location distancePreference").lean();
-  const maxDistance = currentUser!.distancePreference * 1609.344;
+  const maxDistance =  currentUser!.distancePreference? currentUser!.distancePreference*1609.344: 0;
 
   const friendships = await Friend.find({
     $or: [{ user1: userId }, { user2: userId }],
@@ -75,19 +77,19 @@ const findFriends = async (req: Request, res: Response, next: NextFunction): Pro
   const blockedIds = blockedUsers.map((b) => b.blocked);
 
   const excludeIds = [...friendIds, ...pendingIds, ...blockedIds, new Types.ObjectId(userId as string)];
-  console.log(excludeIds);
-
+  console.log("maxDistance: ", maxDistance);
+  // const miles = currentUser.distancePreference ?? 0;  
+  // const maxDistance = Math.max(0, miles * 1_609.344);
+  
   const users = await User.aggregate([
     {
       $geoNear: {
-        near: currentUser!.location,
-        distanceField: "distance",
-        maxDistance: maxDistance,
-        query: {
-          _id: { $nin: excludeIds },
-        },
-        spherical: true,
-      },
+      near: currentUser!.location,
+      distanceField: "distance",
+      maxDistance,
+      query: { _id: { $nin: excludeIds } },
+      spherical: true,
+    },
     },
     {
       $lookup: {
@@ -160,7 +162,13 @@ const findFriends = async (req: Request, res: Response, next: NextFunction): Pro
 };
 
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  console.log(req.body);
+  console.log(req.files)
+   // if there are uploaded files
+    if (Array.isArray(req.files) && req.files.length > 0) {
+      const files = req.files as Express.Multer.File[];
+      // map each file to just its filename (or path)
+       req.body.photo = files.map(f => f.filename);
+    }
   const user = await User.findByIdAndUpdate(req.user.userId, { $set: req.body }, { new: true });
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: user });
 };

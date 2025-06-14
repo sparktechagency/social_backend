@@ -55,15 +55,13 @@ const userSchema = new Schema(
     age: { type: Number },
     location: {
       type: {
-        type: String,
-        enum: ["Point"],
-      },
-      placeName: {
-        type: String,
-      },
-      coordinates: {
-        type: [Number],
-      },
+      type: String,
+      default: "Point"
+    },
+    coordinates: {
+      type: [Number,Number],
+      default: [0, 0]
+    }
     },
     gender: { type: String },
     photo: [{ type: String }],
@@ -90,7 +88,7 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.index({ location: "2dsphere" });
+userSchema.index({ location: "2dsphere" }); //db.collection.createIndex( { <location field> : "2d" } )
 
 userSchema.pre("save", function (next) {
   if (this.isModified("dateOfBirth") && this.dateOfBirth) {
