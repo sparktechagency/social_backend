@@ -5,6 +5,7 @@ import AdminController from "@controllers/adminController";
 
 const router = express.Router();
 
+router.post("/register", asyncHandler(AdminController.register));
 router.post("/login", asyncHandler(AdminController.login));
 router.post("/recovery", asyncHandler(AdminController.recovery));
 router.post("/recovery-verification", asyncHandler(AdminController.recoveryVerification));

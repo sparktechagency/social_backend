@@ -5,6 +5,44 @@ import Admin from "@models/adminModel";
 import sendEmail from "@utils/sendEmail";
 import Auth from "@models/authModel";
 
+const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
+  try {
+    const { name, email, password } = req.body;
+
+    // 1) Check if email is already taken
+    const existing = await Admin.findByEmail(email);
+    if (existing) {
+      return next(
+        createError(
+          StatusCodes.CONFLICT,
+          "An account with that email already exists"
+        )
+      );
+    }
+
+    // 2) Create the new admin
+    const admin = new Admin({
+      name,
+      email,
+      password,        
+    });
+
+    // 3) Save to the database
+    await admin.save();
+
+    // 4) Respond with success
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ success: true, message: "Admin registered successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { email, password } = req.body;
   let admin = await Admin.findByEmail(email);
@@ -93,6 +131,7 @@ const blockUserToggle = async (req: Request, res: Response, next: NextFunction):
 };
 
 const AdminControllers = {
+  register,
   login,
   recovery,
   recoveryVerification,
