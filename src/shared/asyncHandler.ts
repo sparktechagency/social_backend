@@ -8,22 +8,22 @@ export const asyncHandler = (fn: AsyncRequestHandler) => (req: Request, res: Res
 };
 
 export const asyncSessionHandler = (fn: AsyncRequestHandler) => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    console.log("data1: ", req.body)
-    // const session = await mongoose.startSession();
+  // return async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  
+  //   const session = await mongoose.startSession();
 
-    // console.log("session: ", session.startTransaction())
-    // try {
-    //   session.startTransaction();
-    //   req.session = session;
-    //   await fn(req, res, next);
-    //   await session.commitTransaction();
-    // } catch (error) {
-    //   await session.abortTransaction();
-    //   next(error);
-    // } finally {
-    //   await session.endSession();
-    // }
-  };
+  //   console.log("session: ", session.startTransaction())
+  //   try {
+  //     session.startTransaction();
+  //     req.session = session;
+  //     await fn(req, res, next);
+  //     await session.commitTransaction();
+  //   } catch (error) {
+  //     await session.abortTransaction();
+  //     next(error);
+  //   } finally {
+  //     await session.endSession();
+  //   }
+  // };
 };
 

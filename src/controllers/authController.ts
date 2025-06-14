@@ -247,9 +247,8 @@ const resetPassword = async (req: Request, res: Response, next: NextFunction): P
 };
 
 const changePassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const user = req.user;
-  const { password, newPassword, confirmPassword } = req.body;
-
+  let user = req.user;
+  const {password, newPassword, confirmPassword } = req.body;
   let auth = await Auth.findByEmail(user.email);
   if (!auth) return next(createError(StatusCodes.NOT_FOUND, "User Not Found"));
   if (!(await auth.comparePassword(password)))
@@ -260,12 +259,25 @@ const changePassword = async (req: Request, res: Response, next: NextFunction): 
   return res.status(StatusCodes.OK).json({ success: true, message: "Password changed successfully", data: {} });
 };
 
-const remove = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
   const userId = req.user.userId;
   const authId = req.user.authId;
-  console.log("userID: ", userId, " authId: ", authId)
-  await Promise.all([Auth.findByIdAndDelete(authId), User.findByIdAndDelete(userId)]);
-  return res.status(StatusCodes.OK).json({ success: true, message: "User Removed successfully", data: {} });
+
+  console.log("userID: ", userId, " authId: ", authId);
+
+  // deleteOne just sends a single DELETE op per model
+  await Promise.all([
+    Auth.deleteOne({ _id: authId }),
+    User.deleteOne({ _id: userId }),
+  ]);
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ success: true, message: "User Removed successfully", data: {} });
 };
 
 const AuthController = {

@@ -16,5 +16,5 @@ router.post("/recovery-verification", asyncHandler(AuthController.recoveryVerifi
 router.post("/reset-password", asyncHandler(AuthController.resetPassword));
 router.post("/change-password", authorize, asyncHandler(AuthController.changePassword));
 router.delete("/delete", authorize, asyncHandler(AuthController.remove));
-
+// authorize,
 export default router;
