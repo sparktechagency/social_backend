@@ -14,6 +14,7 @@ import ActivityRouter from "@routes/activityRouter";
 import FriendRequestRouter from "@routes/friendRequestRouter";
 import FriendRouter from "@routes/friendRouter";
 import BlockedUserRouter from "@routes/blockedUserRouter";
+import AdminRouter from "@routes/adminRouter";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -37,6 +38,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 const routes = [
   { path: "/auth", router: AuthRouter },
   { path: "/user", router: UserRouter },
+  { path: "/admin", router: AdminRouter },
   { path: "/friend-request", router: FriendRequestRouter },
   { path: "/friend", router: FriendRouter },
   { path: "/blocked", router: BlockedUserRouter },
