@@ -8,7 +8,7 @@ const clientOptions = {
 
 export async function connectDB() {
   try {
-    await mongoose.connect(process.env.ATLAS_URI!, clientOptions);
+    await mongoose.connect(process.env.ATLAS_URI!,  clientOptions);
     await mongoose.connection.db!.admin().command({ ping: 1 });
     const dbName = mongoose.connection.db?.databaseName;
    logger.info(`Successfully Connected to MongoDB Atlas`);
@@ -18,4 +18,6 @@ export async function connectDB() {
     logger.error("Failed to connect to MongoDB:", error);
     process.exit(1);
   }
-}
+};
+
+

@@ -9,5 +9,4 @@ const router = express.Router();
 router.get("/find-friends", authorize, asyncHandler(UserController.findFriends));
 router.get("/", authorize, asyncHandler(UserController.get));
 router.patch("/update", authorize, upload.array("photo", 10), asyncHandler(UserController.update));
-// upload.single("file"),
 export default router;

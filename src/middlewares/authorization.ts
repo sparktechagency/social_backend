@@ -57,6 +57,7 @@ const authorizeToken = (secret: string, isAdminCheck: boolean = false) => {
       req.admin = data;
     } else {
       data = await getUserInfo(decoded.id);
+      console.log("Decoded user data: ", data);
       if (!data) return next(createError(StatusCodes.NOT_FOUND, "Account Not Found"));
       req.user = data;
     }
