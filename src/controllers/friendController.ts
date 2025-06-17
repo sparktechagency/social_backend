@@ -54,6 +54,9 @@ const getAllFriends = async (req: Request, res: Response, next: NextFunction): P
 const unfriend = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const friendUserId = req.body.friendUserId;
   const userId = req.user.userId;
+  if (!Types.ObjectId.isValid(friendUserId) || !Types.ObjectId.isValid(userId)) {
+    throw createError(StatusCodes.BAD_REQUEST, "Invalid user ID");
+  }
   const friendShip = await Friend.findOne({
     $or: [
       { user1: userId, user2: friendUserId },
