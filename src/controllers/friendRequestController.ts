@@ -21,15 +21,38 @@ const sendFriendRequest = async (req: Request, res: Response, next: NextFunction
   res.status(StatusCodes.CREATED).json({ success: true, message: "Success", data: friendRequest });
 };
 
+// const cancelFriendRequest = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+//   const friendRequest = await FriendRequest.findOneAndDelete({
+//     sender: req.user.userId,
+//     receiver: req.body.userId,
+//   });
+//   console.log("sender", req.user.userId, " reveiver", req.body.userId, "friendRequest", friendRequest);
+//   if (!friendRequest) {
+//     return res.status(StatusCodes.NOT_FOUND).json({ success: false, message: "Friend request not found", data: {} });
+//   }
+//   res.status(StatusCodes.OK).json({ success: true, message: "Friend request canceled", data: {} });
+// };
+
 const cancelFriendRequest = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const friendRequest = await FriendRequest.findOneAndDelete({
-    sender: req.user.userId,
-    receiver: req.body.userId,
-  });
-  if (!friendRequest) {
-    return res.status(StatusCodes.NOT_FOUND).json({ success: false, message: "Friend request not found", data: {} });
+  const userId = req.user.userId;
+  const { senderId } = req.body; 
+  console.log("userId", userId, " senderId", senderId);
+  // validate
+  if (!mongoose.Types.ObjectId.isValid(senderId)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: "Invalid senderId" });
   }
-  res.status(StatusCodes.OK).json({ success: true, message: "Friend request canceled", data: {} });
+
+  // delete the request where *you* were the receiver
+  const fr = await FriendRequest.findOneAndDelete({
+    sender: senderId,
+    receiver: userId,
+  });
+
+  if (!fr) {
+    return res.status(StatusCodes.NOT_FOUND).json({ success: false, message: "Friend request not found" });
+  }
+
+  return res.status(StatusCodes.OK).json({ success: true, message: "Friend request canceled", data: {} });
 };
 
 const getFriendRequests = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -92,6 +115,7 @@ const getFriendRequests = async (req: Request, res: Response, next: NextFunction
 const friendRequestAction = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { senderId, action } = req.body;
   const userId = req.user.userId;
+  console.log("senderId", senderId, " userId", userId, "action", action);
 
   if (!mongoose.Types.ObjectId.isValid(senderId)) throw createError(StatusCodes.BAD_REQUEST, "Invalid user ID");
 
@@ -99,7 +123,7 @@ const friendRequestAction = async (req: Request, res: Response, next: NextFuncti
     throw createError(StatusCodes.BAD_REQUEST, "Invalid action");
 
   const session = req.session;
-
+  console.log("session", session);
   const existingRequest = await FriendRequest.findOne({ sender: senderId, receiver: userId }).session(session);
   if (!existingRequest) throw createError(StatusCodes.NOT_FOUND, "Friend request not found");
 
@@ -111,14 +135,32 @@ const friendRequestAction = async (req: Request, res: Response, next: NextFuncti
   }).session(session);
   if (existingFriendship) throw createError(StatusCodes.CONFLICT, "Friendship already exists.");
 
+  // existingRequest.status = action;
+  // await existingRequest.save({ session });
+
+  // let friendship = null;
+  // if (action === RequestAction.ACCEPTED)
+  //   friendship = await Friend.create({ user1: userId, user2: senderId }, { session });
+
+  // res.status(action === RequestAction.ACCEPTED ? StatusCodes.CREATED : StatusCodes.OK).json({
+  //   success: true,
+  //   message: `Friend request ${action} successfully`,
+  //   data: action === RequestAction.ACCEPTED ? friendship : existingRequest,
+  // });
+
   existingRequest.status = action;
   await existingRequest.save({ session });
 
   let friendship = null;
-  if (action === RequestAction.ACCEPTED)
-    friendship = await Friend.create({ user1: userId, user2: senderId }, { session });
+  if (action === RequestAction.ACCEPTED) {
+    // instantiate a doc and save with the session
+    friendship = await new Friend({
+      user1: userId,
+      user2: senderId,
+    }).save({ session });
+  }
 
-  res.status(action === RequestAction.ACCEPTED ? StatusCodes.CREATED : StatusCodes.OK).json({
+  return res.status(action === RequestAction.ACCEPTED ? StatusCodes.CREATED : StatusCodes.OK).json({
     success: true,
     message: `Friend request ${action} successfully`,
     data: action === RequestAction.ACCEPTED ? friendship : existingRequest,

@@ -167,7 +167,10 @@ const update = async (req: Request, res: Response, next: NextFunction): Promise<
     if (Array.isArray(req.files) && req.files.length > 0) {
       const files = req.files as Express.Multer.File[];
       // map each file to just its filename (or path)
-       req.body.photo = files.map(f => f.filename)
+      
+    req.body.photo = files
+    .map(f => `uploads\\${f.filename}`)
+    .filter(Boolean);
 
     }
   const user = await User.findByIdAndUpdate(req.user.userId, { $set: req.body }, { new: true });

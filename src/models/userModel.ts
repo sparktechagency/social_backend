@@ -39,6 +39,8 @@ export type UserSchema = Document & {
   relationshipStatus: string;
   race: string;
   interests: string[];
+  likeReceived:string[];
+  likeProfiled:string[];
   hairColor: string;
   profession: string;
   bio: string;
@@ -78,6 +80,8 @@ const userSchema = new Schema(
     relationshipStatus: { type: String, default: "" },
     race: { type: String, default: "" },
     interests: [{ type: String }],
+    likeReceived: [{ type: String }],
+    likeProfiled: [{ type: String }],
     hairColor: { type: String, default: "" },
     profession: { type: String, default: "" },
     bio: { type: String, default: "" },
