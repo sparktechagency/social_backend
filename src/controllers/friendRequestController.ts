@@ -36,7 +36,6 @@ const sendFriendRequest = async (req: Request, res: Response, next: NextFunction
 const cancelFriendRequest = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const userId = req.user.userId;
   const { senderId } = req.body; 
-  console.log("userId", userId, " senderId", senderId);
   // validate
   if (!mongoose.Types.ObjectId.isValid(senderId)) {
     return res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: "Invalid senderId" });
