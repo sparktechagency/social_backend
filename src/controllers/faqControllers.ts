@@ -8,6 +8,7 @@ const create = async (req: Request, res: Response, next: NextFunction): Promise<
   const { question, answer } = req.body;
   const faq = await Faq.create({ question, answer });
   return res.status(StatusCodes.CREATED).json({ success: true, message: "Success", data: faq });
+  
 };
 
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
