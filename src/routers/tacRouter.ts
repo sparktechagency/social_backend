@@ -5,6 +5,7 @@ import { asyncHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
+router.post("/create", admin_authorize, asyncHandler(TaCController.create));                
 router.get("/", authorize, asyncHandler(TaCController.get));
 router.patch("/update", admin_authorize, asyncHandler(TaCController.update));
 

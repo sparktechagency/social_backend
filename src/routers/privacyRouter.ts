@@ -5,6 +5,7 @@ import { asyncHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
+router.post("/create", admin_authorize, asyncHandler(PrivacyController.create));
 router.get("/", authorize, asyncHandler(PrivacyController.get));
 router.patch("/update", admin_authorize, asyncHandler(PrivacyController.update));
 
