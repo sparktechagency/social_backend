@@ -6,6 +6,7 @@ import { asyncHandler } from "@shared/asyncHandler";
 
 const router = express.Router();
 
+router.post("/create", admin_authorize, asyncHandler(ContactController.create));
 router.get("/", authorize, asyncHandler(ContactController.get));
 router.patch("/update", admin_authorize, asyncHandler(ContactController.update));
 
