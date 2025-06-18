@@ -17,22 +17,15 @@ import { Types } from "mongoose";
 //   });
 // };
 
-const create = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<any> => {
+const create = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
-     // 1) Extract uploaded files metadata
+    // 1) Extract uploaded files metadata
     const files = req.files as unknown as Record<string, Express.Multer.File[]>;
     const thumbArr = files.thumbnail;
     const venueArr = files.venue;
     if (!thumbArr?.[0]) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ success: false, message: "Thumbnail file is required" });
+      return res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: "Thumbnail file is required" });
     }
-  
 
     // Build relative path for thumbnail
     const thumbnail = `/uploads/${thumbArr[0].filename}`;
@@ -42,33 +35,19 @@ const create = async (
     if (venueArr[0]) {
       venue = `/uploads/${venueArr[0].filename}`;
     }
-    
 
     // 2) Extract & coerce body fields
-    const {
-      name,
-      theme,
-      startTime,
-      endTime,
-      activityType,
-      date,
-      maximumGuest,
-      distanceRange,
-      note,
-    } = req.body;
-  
-    console.log("ageRange[low]: ",  req.body.ageRange.low)
+    const { name, theme, startTime, endTime, activityType, date, maximumGuest, distanceRange, note } = req.body;
+
+    console.log("ageRange[low]: ", req.body.ageRange.low);
     // 3) Parse the location coordinates array
     //    (Postman form-data: two keys "location[coordinates]" ⇒ req.body[...] is a string[])
     const rawCoords = req.body.location.coordinates;
     if (!Array.isArray(rawCoords) || rawCoords.length !== 2) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({
-          success: false,
-          message:
-            "Please send two form‑fields named location[coordinates] (lng then lat)",
-        });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Please send two form‑fields named location[coordinates] (lng then lat)",
+      });
     }
     const coordinates = rawCoords.map((v) => {
       const n = parseFloat(v);
@@ -124,9 +103,6 @@ const create = async (
     next(err);
   }
 };
-
-
-
 
 const get = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const page = Number.parseInt(req.query.page as string) || 1;
@@ -326,29 +302,89 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   });
 };
 
+// const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+//      // 1) Grab the Multer‐parsed files
+//     const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+
+//     // 2) Build an “updates” object only with fields you actually want to change
+//     const updates: any = { ...req.body };
+
+//     // 3) If a new thumbnail was uploaded, overwrite that field
+//     if (files?.thumbnail?.length) {
+//       const thumbFile = files.thumbnail[0];
+//       updates.thumbnail = `/uploads/${thumbFile.filename}`;
+//     }
+
+//     // 4) If a new venue image was uploaded, overwrite that field
+//     if (files?.venue?.length) {
+//       const venueFile = files.venue[0];
+//       updates.venue = `/uploads/${venueFile.filename}`;
+//     }
+
+//   const activity = await Activity.findByIdAndUpdate(req.params.id, {$set: updates}, { new: true });
+//   if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found");
+//   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: activity });
+// };
+
 const update = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-   
-     // 1) Grab the Multer‐parsed files
+  try {
+    // 1) Files handling
     const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+    const updates: any = {};
 
-    // 2) Build an “updates” object only with fields you actually want to change
-    const updates: any = { ...req.body };
+    const existingActivity = await Activity.findById(req.params.id);
+    if (!existingActivity) throw createError(404, "Not found");
 
-    // 3) If a new thumbnail was uploaded, overwrite that field
+    // 2) Body fields
+    Object.assign(updates, req.body);
+
+    // 3) File updates
     if (files?.thumbnail?.length) {
-      const thumbFile = files.thumbnail[0];
-      updates.thumbnail = `/uploads/${thumbFile.filename}`;
+      updates.thumbnail = `/uploads/${files.thumbnail[0].filename}`;
+    }
+    if (files?.venue?.length) {
+      updates.venue = `/uploads/${files.venue[0].filename}`;
     }
 
-    // 4) If a new venue image was uploaded, overwrite that field
-    if (files?.venue?.length) {
-      const venueFile = files.venue[0];
-      updates.venue = `/uploads/${venueFile.filename}`;
+    console.log("req.body.location: ", req.body.location);
+
+    // 4) GeoJSON update if provided via form-data
+    const rawCoords = req.body.location.coordinates as string[] | undefined;
+    if (rawCoords !== undefined) {
+      if (!Array.isArray(rawCoords) || rawCoords.length !== 2) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          success: false,
+          message: "location.coordinates must be provided twice as form-data fields: lng then lat",
+        });
+      }
+      const coords = rawCoords.map((v: string) => {
+        const n = parseFloat(v);
+        if (isNaN(n)) throw new Error(`Invalid coordinate: ${v}`);
+        return n;
+      }) as [number, number];
+      updates.location = {
+        type: "Point",
+        coordinates: coords,
+        address: req.body["location[address]"] ?? req.body.location?.address,
+      };
     }
-    
-  const activity = await Activity.findByIdAndUpdate(req.params.id, {$set: updates}, { new: true });
-  if (!activity) throw createError(StatusCodes.NOT_FOUND, "Activity not found");
-  return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: activity });
+
+    // 5) Execute update
+    const updatedActivity = await Activity.findByIdAndUpdate(req.params.id, { $set: updates }, { new: true });
+    if (!updatedActivity) {
+      throw createError(StatusCodes.NOT_FOUND, "Activity not found");
+    }
+
+    // 6) Send response
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Activity updated successfully",
+      data: updatedActivity,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const remove = async (req: Request, res: Response, next: NextFunction): Promise<any> => {

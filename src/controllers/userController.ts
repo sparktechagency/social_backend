@@ -173,7 +173,9 @@ const update = async (req: Request, res: Response, next: NextFunction): Promise<
     .filter(Boolean);
 
     }
+
   const user = await User.findByIdAndUpdate(req.user.userId, { $set: req.body }, { new: true });
+  // console.log("Updated user: ", user);
   return res.status(StatusCodes.OK).json({ success: true, message: "Success", data: user });
 };
 
