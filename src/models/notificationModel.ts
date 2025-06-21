@@ -3,6 +3,9 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 export enum NotificationType {
   InviteToActivity  = "InviteToActivity",
   NewActivity       = "NewActivity",
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
 }
 
 export interface INotification extends Document {
