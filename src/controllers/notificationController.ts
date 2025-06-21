@@ -164,11 +164,13 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const userId = req.user.userId;
+    const userId = req?.user?.userId !== undefined? req.user.userId : req.admin.id;
+    console.log("userId", userId);
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     const id = req.query.id as string;
+    const admin = req.query.isAdmin as string === "true"? true : false;
     if (id) {
       if (!mongoose.Types.ObjectId.isValid(id)) {
         throw createError(StatusCodes.BAD_REQUEST, "Invalid notification ID");
@@ -204,6 +206,33 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
         success: true,
         message: "Notification retrieved successfully",
         data: notification,
+      });
+    }
+    if(admin){
+      const notifications = await Notification.find({})
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .session(session);
+     console.log("notifications", notifications);
+      const total = await Notification.countDocuments({}).session(session);
+      const totalPages = Math.ceil(total / limit);
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: "Notifications retrieved successfully",
+        data: notifications,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasMore: page < totalPages,
+        },
       });
     }
 
