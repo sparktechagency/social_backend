@@ -215,7 +215,6 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
         .limit(limit)
         .lean()
         .session(session);
-     console.log("notifications", notifications);
       const total = await Notification.countDocuments({}).session(session);
       const totalPages = Math.ceil(total / limit);
 
@@ -271,11 +270,21 @@ const get = async (req: Request, res: Response, next: NextFunction): Promise<any
 
 const markAllAsRead = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user.userId;
+    const userId = req?.user?.userId !== undefined ? req.user.userId : req.admin.id;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       throw createError(StatusCodes.BAD_REQUEST, "Invalid user ID");
     }
-
+    console.log("userId", userId, "req.admin.id", req.admin?.id);
+     
+    if(req?.admin?.id){
+      console.log("Marking all admin notifications as read");
+      const adminResult = await Notification.updateMany({ adminRead: false }, { $set: { adminRead: true } });
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: `Marked ${adminResult.modifiedCount} notifications as read`,
+        data: adminResult,
+      });
+    }
     const result = await Notification.updateMany({ receiver: userId, read: false }, { $set: { read: true } });
 
     return res.status(StatusCodes.OK).json({

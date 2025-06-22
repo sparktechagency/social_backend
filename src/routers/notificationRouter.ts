@@ -9,5 +9,6 @@ router.post("/create", authorize, asyncHandler(notificationController.create));
 router.get("/", authorize, asyncHandler(notificationController.get));
 router.get("/note", admin_authorize, asyncHandler(notificationController.get));
 router.patch("/mark-all-as-read", authorize, asyncHandler(notificationController.markAllAsRead));
+router.patch("/mark-all-as-read-admin", admin_authorize, asyncHandler(notificationController.markAllAsRead));
 
 export default router;

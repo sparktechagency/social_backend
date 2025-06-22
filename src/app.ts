@@ -16,6 +16,7 @@ import FriendRequestRouter from "@routes/friendRequestRouter";
 import FriendRouter from "@routes/friendRouter";
 import BlockedUserRouter from "@routes/blockedUserRouter";
 import AdminRouter from "@routes/adminRouter";
+import LikeRouter from "@routes/likesRouter";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -50,6 +51,7 @@ const routes = [
   { path: "/contact", router: ContactRouter },
   { path: "/version", router: VersionRouter },
   { path: "/notification", router: NotificationRouter },
+  { path: "/likes", router: LikeRouter },
 ];
 
 routes.forEach((route) => {

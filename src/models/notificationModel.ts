@@ -14,6 +14,7 @@ export interface INotification extends Document {
   type:      NotificationType;
   activityId:  Types.ObjectId; 
   read:      boolean;
+  adminRead: boolean;
   data: Object[];
   createdAt: Date;
   updatedAt: Date;
@@ -26,6 +27,7 @@ const notificationSchema = new Schema<INotification>(
     type:      { type: String, enum: Object.values(NotificationType), required: true },
     activityId:  { type: Schema.Types.ObjectId},
     read:    { type: Boolean, default: false },
+    adminRead:    { type: Boolean, default: false },
     data:    { type: [Object], default: [] },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
