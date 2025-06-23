@@ -12,9 +12,9 @@ const toggleLike = async (req: Request, res: Response, next: NextFunction) => {
     const likeProfile = req.user.userId;
     const { likeReceived } = req.body;
     console.log("likeProfile", likeProfile, "likeReceived", likeReceived);
-     if(likeProfile === likeReceived) {
+    if (likeProfile === likeReceived) {
       throw createError(StatusCodes.BAD_REQUEST, "You cannot like yourself");
-     }
+    }
     // 1) Validate
     if (!mongoose.Types.ObjectId.isValid(likeReceived)) {
       throw createError(StatusCodes.BAD_REQUEST, "Invalid likeReceived ID");
@@ -84,8 +84,6 @@ const toggleLike = async (req: Request, res: Response, next: NextFunction) => {
 //     const limit = parseInt(req.query.limit as string) || 10;
 //     const skip = (page - 1) * limit;
 
-
-
 //     const filter = { likeProfile: new mongoose.Types.ObjectId(userId), action: "like" };
 
 //     // Total count
@@ -99,7 +97,7 @@ const toggleLike = async (req: Request, res: Response, next: NextFunction) => {
 //       .limit(limit)
 //       .lean()
 //       .exec();
-    
+
 //     // const userInformation = await User.findById(likes[0].LikeReceived).lean();
 //     console.log("likes", likes);
 //     const totalPages = Math.ceil(total / limit);
@@ -115,11 +113,7 @@ const toggleLike = async (req: Request, res: Response, next: NextFunction) => {
 //   }
 // };
 
-export const getLikes = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getLikes = async (req: Request, res: Response, next: NextFunction) => {
   // Start a session for consistent reads
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -132,13 +126,13 @@ export const getLikes = async (
     }
 
     // Parse pagination
-    const page  = Math.max(1, parseInt(req.query.page as string, 10)  || 1);
+    const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
     const limit = Math.max(1, parseInt(req.query.limit as string, 10) || 10);
-    const skip  = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
     const filter = {
       likeProfile: new mongoose.Types.ObjectId(userId),
-      action:      "like"
+      action: "like",
     };
 
     // Total count
@@ -155,11 +149,7 @@ export const getLikes = async (
 
     // Extract unique LikeReceived IDs
     const ids = Array.from(
-      new Set(
-        likes
-          .map(l => l.LikeReceived && l.LikeReceived.toString())
-          .filter((id): id is string => Boolean(id))
-      )
+      new Set(likes.map((l) => l.LikeReceived && l.LikeReceived.toString()).filter((id): id is string => Boolean(id)))
     );
 
     // Fetch user docs
@@ -170,10 +160,9 @@ export const getLikes = async (
       .exec();
 
     // Merge back
-    const enriched = likes.map(l => ({
+    const enriched = likes.map((l) => ({
       ...l,
-      LikeReceived:
-        users.find(u => u._id.toString() === l.LikeReceived.toString()) || null
+      LikeReceived: users.find((u) => u._id.toString() === l.LikeReceived.toString()) || null,
     }));
 
     const totalPages = Math.ceil(total / limit);
@@ -190,8 +179,8 @@ export const getLikes = async (
         limit,
         total,
         totalPages,
-        hasMore: page < totalPages
-      }
+        hasMore: page < totalPages,
+      },
     });
   } catch (err) {
     await session.abortTransaction();
@@ -199,7 +188,6 @@ export const getLikes = async (
     next(err);
   }
 };
-
 
 const getReceivedLikes = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -221,12 +209,7 @@ const getReceivedLikes = async (req: Request, res: Response, next: NextFunction)
     const total = await Like.countDocuments(filter);
 
     // Fetch paginated likes
-    const likes = await Like.find(filter)
-      .populate("likeProfile")
-      .skip(skip)
-      .limit(limit)
-      .lean()
-      .exec();
+    const likes = await Like.find(filter).populate("likeProfile").skip(skip).limit(limit).lean().exec();
 
     const totalPages = Math.ceil(total / limit);
 
@@ -244,6 +227,6 @@ const getReceivedLikes = async (req: Request, res: Response, next: NextFunction)
 const likesController = {
   toggleLike,
   getLikes,
-  getReceivedLikes
+  getReceivedLikes,
 };
 export default likesController;
