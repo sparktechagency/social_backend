@@ -20,6 +20,9 @@ export interface PaymentRecord {
   currency: string;
   timestamp: Date;
   transactionId: string;
+  status: 'paid' | 'requires_action' | 'unpaid' | 'failed';
+  receiptUrl?: string;
+  description?: string;
 }
 
 export interface IBoostPlan extends Document {
@@ -27,7 +30,6 @@ export interface IBoostPlan extends Document {
   boostType: BoostType;
   profile?: BoostSubDoc;
   activity?: BoostSubDoc;
-  amount: number;
   paymentHistory: PaymentRecord[];
   createdAt: Date;
   updatedAt: Date;
@@ -46,11 +48,14 @@ const boostSubSchema = new Schema<BoostSubDoc>(
 
 const paymentSchema = new Schema<PaymentRecord>(
   {
-    method:        { type: String, required: true },
-    amount:        { type: Number, required: true },
-    currency:      { type: String, required: true },
-    timestamp:     { type: Date, default: () => new Date() },
-    transactionId: { type: String, required: true },
+    method:           { type: String, required: true },
+    amount:           { type: Number, required: true },
+    currency:         { type: String, required: true },
+    timestamp:        { type: Date, default: () => new Date() },
+    transactionId:    { type: String, required: true },
+    status:           { type: String, enum: ['paid','requires_action','unpaid', 'failed'], required: true },
+    receiptUrl:       { type: String, default: '' },
+    description:      { type: String, default: '' },
   },
   { _id: false }
 );
@@ -61,7 +66,6 @@ const boostPlanSchema = new Schema<IBoostPlan>(
     boostType:      { type: String, enum: Object.values(BoostType), required: true },
     profile:        { type: boostSubSchema },
     activity:       { type: boostSubSchema },
-    amount:         { type: Number, required: true },
     paymentHistory: { type: [paymentSchema], default: [] },
   },
   { timestamps: true }
