@@ -150,7 +150,7 @@ const updateBoostPlan = async (req: Request, res: Response, next: NextFunction) 
           description:     `Boost plan for ${boostType}`
         }
       ],
-    };
+    };      
 
     if (boostType === BoostType.Profile || boostType === BoostType.Package) {
        profile.endingTime = new Date(new Date(profile.startingTime).getTime() + profile.duration * 60 * 1000);
